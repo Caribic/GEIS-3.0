@@ -1,4 +1,4 @@
-const CACHE_NAME = 'svoz-palet-v16'; 
+const CACHE_NAME = 'svoz-palet-v17'; 
 
 // Relativní cesty zajišťují kompatibilitu na jakékoliv doméně/složce na GitHubu
 const urlsToCache = [
