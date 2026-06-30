@@ -83,7 +83,7 @@
 </head>
 <body class="bg-gray-100 font-sans antialiased text-gray-900">
 
-    <!-- Záhlaví s integrovaným kalendářem a novým vyhledávacím polem -->
+    <!-- Záhlaví s integrovaným kalendářem -->
     <header class="bg-white text-slate-900 p-3 shadow-md sticky top-0 z-20 border-b-4 border-[#003366] flex flex-col gap-2">
         <div class="flex justify-between items-center gap-2">
             <div class="flex items-center gap-2.5 min-w-0">
@@ -322,7 +322,7 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Řidiči (Návěsy 33 EUR)</h2>
+            <h2 class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Firemní řidiči (Návěsy 33 EUR)</h2>
             <div class="flex space-x-2 mb-3">
                 <input type="text" id="newInternalDriverName" placeholder="Jméno řidiče" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366]">
                 <button onclick="addItem('internalDrivers', 'newInternalDriverName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
@@ -483,7 +483,7 @@
             return [...array].sort((a, b) => a.localeCompare(b, 'cs'));
         }
 
-        // FIREBASE REALTIME SYNC
+        // FIREBASE SYNC
         db.collection("settings").get().then((snapshot) => {
             if (snapshot.empty) {
                 db.collection("settings").doc("customersDelivery").set({ list: defaultCustomers });
@@ -563,7 +563,7 @@
             }
         }
 
-        // Ochrana iOS Safari s odloženým vyčištěním selectu
+        // Fix pro iOS Safari s odloženým zpožděním 100 ms k vyčištění nativní volby
         function autoAddDraftCustomer(type, selectEl) {
             const customer = selectEl.value;
             if (!customer) return;
@@ -773,12 +773,6 @@
             }
         }
 
-        function deletePickup(pickupId) {
-            if (confirm("Opravdu chcete stornovat tuto nakládku řidiče? Palety se vrátí zpět do stavu k odvozu.")) {
-                db.collection("pickups").doc(pickupId).delete();
-            }
-        }
-
         // Nové přehledné rozložení podle vašeho grafického návrhu (2. obrázek)
         function renderModalContent() {
             if (!currentTargetId) return;
@@ -943,7 +937,9 @@
             });
             
             const activeBtn = document.getElementById(`filter-${filter}`);
-            if (activeBtn) activeBtn.className = "px-3 py-1 rounded-md transition-all bg-white text-slate-800 shadow-sm";
+            if (activeBtn) {
+                activeBtn.className = "px-3 py-1 rounded-md transition-all bg-white text-slate-800 shadow-sm";
+            }
             
             renderCounterTab();
         }
@@ -1021,17 +1017,19 @@
                 const isDone = item.isDone;
                 const pct = item.progressPercent;
 
+                // Dynamická volba barvy podle splnění svozu (Červená pro nesplněný zbytek, Zelená pro splněnou část)
                 const barColorClass = pct >= 100 ? 'bg-emerald-500' : (pct > 32 ? 'bg-amber-500' : 'bg-red-500');
 
                 let tileHtml = '';
                 if (isDone) {
+                    // Dokončený svoz se zabarví celý elegantně do zelena (Geis Green tón s fajfkou)
                     tileHtml = `
-                    <div onclick="openDetails('${t.id}')" class="bg-[#e6f0fa] border-l-[3px] border-[#003366] border-y border-r border-gray-200 rounded-lg p-2 shadow-sm active:scale-95 transition-all cursor-pointer flex flex-col justify-between h-[72px]">
-                        <div class="font-bold text-[#003366] text-xs truncate flex justify-between items-center">
+                    <div onclick="openDetails('${t.id}')" class="bg-[#f4f9e8] dark:bg-emerald-950/40 border-l-[3px] border-[#96c11f] border-y border-r border-gray-200 dark:border-slate-700 rounded-lg p-2 shadow-sm active:scale-95 transition-all cursor-pointer flex flex-col justify-between h-[72px]">
+                        <div class="font-bold text-[#688a10] dark:text-emerald-300 text-xs truncate flex justify-between items-center">
                             <span>${t.customer}</span>
-                            <span class="text-[10px]">✓</span>
+                            <span class="text-[10px] text-[#96c11f]">✓</span>
                         </div>
-                        <div class="text-[9px] font-black text-center text-[#003366] bg-[#cce0f5] py-0.5 rounded uppercase tracking-wider leading-none mt-auto">
+                        <div class="text-[9px] font-black text-center text-[#688a10] dark:text-emerald-300 bg-[#e3f0b9] dark:bg-emerald-900/50 py-0.5 rounded uppercase tracking-wider leading-none mt-auto">
                             HOTOVO
                         </div>
                     </div>`;
@@ -1052,8 +1050,9 @@
                             </span>
                         </div>
                         
-                        <div class="w-full bg-gray-150 h-1 rounded-full mt-1.5 overflow-hidden">
-                            <div class="${barColorClass} h-1" style="width: ${pct}%"></div>
+                        <!-- Červeno-zelená stavová lišta postupu (červené pozadí, zelený postup) -->
+                        <div class="w-full bg-red-500 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                            <div class="bg-emerald-500 h-1.5" style="width: ${pct}%"></div>
                         </div>
                     </div>`;
                 }
@@ -1064,10 +1063,11 @@
         // --- ZÁLOŽKA NÁVĚSY ---
         function editTrailerPlan(planId) {
             const plans = localTrailerPlans;
-            const p = plans.find(item => item.id === planId);
+            // Robustní porovnání ID pro zamezení nefunkčnosti odkazu
+            const p = plans.find(item => item.id === planId || item.docId === planId);
             if (!p) return;
 
-            editingTrailerPlanId = p.id;
+            editingTrailerPlanId = p.id || p.docId;
             document.getElementById('trailerDriverSelect').value = p.driver;
             document.getElementById('trailerSPZInput').value = p.spz === 'BEZ SPZ' ? '' : p.spz;
 
@@ -1154,6 +1154,7 @@
             renderDraftLists();
         }
 
+        // Zobrazení plánu návěsů v kartách (vždy funkční editace)
         function renderTrailersTab() {
             const searchQuery = (document.getElementById('trailerDriverSearch')?.value || '').trim().toUpperCase();
             populateAllDropdowns();
@@ -1449,10 +1450,12 @@
 
         function switchTab(tabId, event) {
             if (editingTrailerPlanId) cancelTrailerEdit();
+            clearGlobalSearch();
 
-            ['counter', 'trailers', 'stats', 'settings'].forEach(id => {
-                document.getElementById(`tab-${id}`).className = 'hidden-tab';
-            });
+            document.getElementById('tab-counter').className = 'hidden-tab';
+            document.getElementById('tab-trailers').className = 'hidden-tab';
+            document.getElementById('tab-stats').className = 'hidden-tab';
+            document.getElementById('tab-settings').className = 'hidden-tab';
             
             const isCounterOrTrailers = (tabId === 'counter' || tabId === 'trailers');
             document.getElementById('headerDateControls').style.display = isCounterOrTrailers ? 'flex' : 'none';
@@ -1479,7 +1482,7 @@
             if(tabId === 'settings') renderSettingsTab();
         }
 
-        // Pevná a správná inicializace kalendáře i záložky při spuštění
+        // Pevná a správná inicializace kalendáře i záložky při spuštění (vyřeší chybějící datum)
         updateDateUI();
         switchTab('counter');
     </script>
