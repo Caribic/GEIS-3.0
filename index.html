@@ -10,7 +10,7 @@
     <!-- PWA podpora pro iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link class="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -193,12 +193,63 @@
             </div>
             <div id="trailerPlansList" class="space-y-1.5"></div>
         </div>
+    </main>
 
-        <!-- EDITAČNÍ / NOVÉ OKNO PLÁNOVÁNÍ (Skryté v základu) -->
-        <div id="trailerFormContainer" class="bg-white rounded-xl shadow-sm p-4 border border-gray-200 hidden space-y-4">
-            <h2 class="text-xs font-black text-gray-400 uppercase tracking-wider">Zapsat plán návěsu (33 EUR)</h2>
+    <!-- Modální okno nakládky řidiče -->
+    <div id="detailsModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200">
+            <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
+                <div>
+                    <div id="modalCustomerName" class="text-xl font-black leading-tight uppercase text-white">---</div>
+                    <p id="modalTargetInfo" class="text-xs text-slate-200 mt-0.5 font-medium">---</p>
+                </div>
+                <button onclick="closeDetails()" class="bg-[#002244] hover:bg-[#001530] text-white rounded-full p-1.5 text-xs font-bold w-7 h-7 flex items-center justify-center transition-colors">✕</button>
+            </div>
             
-            <div class="space-y-4">
+            <div class="p-4 space-y-4 overflow-y-auto flex-1">
+                <div class="grid grid-cols-3 gap-1.5">
+                    <div id="modalFPBox" class="text-center p-2 rounded-xl border">
+                        <span id="modalFPLabel" class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider">FP</span>
+                        <span id="modalRemainingFP" class="text-lg font-black">0</span>
+                    </div>
+                    <div id="modalKHBox" class="text-center p-2 rounded-xl border">
+                        <span id="modalKHLabel" class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider">KH</span>
+                        <span id="modalRemainingKH" class="text-lg font-black">0</span>
+                    </div>
+                    <div id="modalPKBox" class="text-center p-2 rounded-xl border">
+                        <span id="modalPKLabel" class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider">PK</span>
+                        <span id="modalRemainingPK" class="text-lg font-black">0</span>
+                    </div>
+                </div>
+
+                <div id="modalFormContainer"></div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Historie nakládek vozidel:</p>
+                    <div id="modalHistoryContainer" class="space-y-1.5 max-h-48 overflow-y-auto pr-1"></div>
+                </div>
+                
+                <div class="pt-2 border-t border-gray-100 flex justify-end">
+                    <button id="btnDeleteTarget" class="text-xs text-[#e30613] hover:text-red-800 font-semibold p-1 transition-colors flex items-center gap-1">
+                        ✕ Odstranit zákazníka ze svozu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modální okno pro Nový / Editovaný Plán návěsu (Působí čistě jako detail svozu) -->
+    <div id="trailerPlanModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200">
+            <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
+                <div>
+                    <h2 id="trailerModalTitle" class="text-lg font-black leading-tight uppercase text-white">Zapsat plán návěsu (33 EUR)</h2>
+                    <p class="text-xs text-slate-200 mt-0.5 font-medium">Zadejte trasy a přiřaďte řidiče</p>
+                </div>
+                <button onclick="closeTrailerModal()" class="bg-[#002244] hover:bg-[#001530] text-white rounded-full p-1.5 text-xs font-bold w-7 h-7 flex items-center justify-center transition-colors">✕</button>
+            </div>
+            
+            <div class="p-4 space-y-4 overflow-y-auto flex-1">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase">Řidič</label>
@@ -244,55 +295,12 @@
                 </div>
 
                 <!-- Tlačítka pro uložení nebo storno trasy -->
-                <div class="flex gap-2 pt-2">
+                <div class="flex gap-2 pt-3 border-t border-gray-200">
                     <button id="btnSaveTrailerPlan" onclick="saveTrailerPlan()" class="flex-1 bg-[#003366] hover:bg-slate-900 text-white font-bold py-3 rounded-lg text-xs transition-colors shadow-sm active:scale-[0.99] uppercase tracking-wider">
                         Uložit plán řidiče na tento den
                     </button>
-                    <button onclick="cancelTrailerEdit()" class="bg-gray-200 hover:bg-gray-300 text-slate-700 font-bold px-4 py-3 rounded-lg text-xs transition-colors uppercase tracking-wider">
-                        Zpět / Zrušit
-                    </button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Modální okno nakládky -->
-    <div id="detailsModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200">
-            <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
-                <div>
-                    <div id="modalCustomerName" class="text-xl font-black leading-tight uppercase text-white">---</div>
-                    <p id="modalTargetInfo" class="text-xs text-slate-200 mt-0.5 font-medium">---</p>
-                </div>
-                <button onclick="closeDetails()" class="bg-[#002244] hover:bg-[#001530] text-white rounded-full p-1.5 text-xs font-bold w-7 h-7 flex items-center justify-center transition-colors">✕</button>
-            </div>
-            
-            <div class="p-4 space-y-4 overflow-y-auto flex-1">
-                <div class="grid grid-cols-3 gap-1.5">
-                    <div id="modalFPBox" class="text-center p-2 rounded-xl border">
-                        <span id="modalFPLabel" class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider">FP</span>
-                        <span id="modalRemainingFP" class="text-lg font-black">0</span>
-                    </div>
-                    <div id="modalKHBox" class="text-center p-2 rounded-xl border">
-                        <span id="modalKHLabel" class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider">KH</span>
-                        <span id="modalRemainingKH" class="text-lg font-black">0</span>
-                    </div>
-                    <div id="modalPKBox" class="text-center p-2 rounded-xl border">
-                        <span id="modalPKLabel" class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider">PK</span>
-                        <span id="modalRemainingPK" class="text-lg font-black">0</span>
-                    </div>
-                </div>
-
-                <div id="modalFormContainer"></div>
-
-                <div class="space-y-2">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Historie nakládek vozidel:</p>
-                    <div id="modalHistoryContainer" class="space-y-1.5 max-h-48 overflow-y-auto pr-1"></div>
-                </div>
-                
-                <div class="pt-2 border-t border-gray-100 flex justify-end">
-                    <button id="btnDeleteTarget" class="text-xs text-[#e30613] hover:text-red-800 font-semibold p-1 transition-colors flex items-center gap-1">
-                        ✕ Odstranit zákazníka ze svozu
+                    <button onclick="closeTrailerModal()" class="bg-gray-200 hover:bg-gray-300 text-slate-700 font-bold px-4 py-3 rounded-lg text-xs transition-colors uppercase tracking-wider">
+                        Zrušit
                     </button>
                 </div>
             </div>
@@ -1159,9 +1167,34 @@
             `).join('');
         }
 
+        function showNewTrailerForm() {
+            editingTrailerPlanId = null;
+            draftDeliveries = [];
+            draftPickups = [];
+            document.getElementById('trailerSPZInput').value = '';
+            document.getElementById('trailerDriverSelect').selectedIndex = 0;
+            renderDraftLists();
+
+            document.getElementById('trailerModalTitle').textContent = 'Zapsat plán návěsu (33 EUR)';
+            document.getElementById('btnSaveTrailerPlan').innerHTML = 'Uložit plán řidiče na tento den';
+            document.getElementById('btnSaveTrailerPlan').className = "flex-1 bg-[#003366] hover:bg-slate-900 text-white font-bold py-3 rounded-lg text-xs transition-colors shadow-sm active:scale-[0.99] uppercase tracking-wider";
+
+            const modal = document.getElementById('trailerPlanModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeTrailerModal() {
+            editingTrailerPlanId = null;
+            draftDeliveries = [];
+            draftPickups = [];
+            const modal = document.getElementById('trailerPlanModal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
         function editTrailerPlan(planId) {
             const plans = localTrailerPlans;
-            // Robustní porovnání ID pro zamezení nefunkčnosti odkazu
             const p = plans.find(item => item.id === planId || item.docId === planId);
             if (!p) return;
 
@@ -1173,37 +1206,20 @@
             draftPickups = [...p.pickups];
             renderDraftLists();
 
+            document.getElementById('trailerModalTitle').textContent = 'Upravit plán návěsu';
             const saveBtn = document.getElementById('btnSaveTrailerPlan');
             if (saveBtn) {
                 saveBtn.innerHTML = 'Uložit změny plánu návěsu';
-                saveBtn.className = "w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-2.5 rounded-lg text-sm transition-colors shadow-sm active:scale-[0.99] uppercase tracking-wider";
+                saveBtn.className = "flex-1 bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 rounded-lg text-xs transition-colors shadow-sm active:scale-[0.99] uppercase tracking-wider";
             }
 
-            let cancelBtn = document.getElementById('btnCancelTrailerEdit');
-            if (!cancelBtn) {
-                const cancelHtml = `<button id="btnCancelTrailerEdit" onclick="cancelTrailerEdit()" class="w-full mt-2 bg-gray-200 hover:bg-gray-300 text-slate-700 font-bold py-2 rounded-lg text-xs transition-colors uppercase tracking-wider">Zrušit editaci</button>`;
-                document.getElementById('btnSaveTrailerPlan').insertAdjacentHTML('afterend', cancelHtml);
-            }
-
-            document.getElementById('tab-trailers').scrollIntoView({ behavior: 'smooth' });
+            const modal = document.getElementById('trailerPlanModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
         function cancelTrailerEdit() {
-            editingTrailerPlanId = null;
-            draftDeliveries = [];
-            draftPickups = [];
-            document.getElementById('trailerSPZInput').value = '';
-            document.getElementById('trailerDriverSelect').selectedIndex = 0;
-            renderDraftLists();
-
-            const saveBtn = document.getElementById('btnSaveTrailerPlan');
-            if (saveBtn) {
-                saveBtn.innerHTML = 'Uložit plán řidiče na tento den';
-                saveBtn.className = "w-full bg-[#003366] hover:bg-slate-900 text-white font-bold py-2.5 rounded-lg text-sm transition-colors shadow-sm active:scale-[0.99] uppercase tracking-wider";
-            }
-
-            const cancelBtn = document.getElementById('btnCancelTrailerEdit');
-            if (cancelBtn) cancelBtn.remove();
+            closeTrailerModal();
         }
 
         function saveTrailerPlan() {
@@ -1222,17 +1238,9 @@
                     spz: spz || "BEZ SPZ",
                     deliveries: [...draftDeliveries],
                     pickups: [...draftPickups]
+                }).then(() => {
+                    closeTrailerModal();
                 }).catch(e => alert("Chyba při aktualizaci: " + e.message));
-                
-                editingTrailerPlanId = null;
-                const cancelBtn = document.getElementById('btnCancelTrailerEdit');
-                if (cancelBtn) cancelBtn.remove();
-                
-                const saveBtn = document.getElementById('btnSaveTrailerPlan');
-                if (saveBtn) {
-                    saveBtn.innerHTML = 'Uložit plán řidiče na tento den';
-                    saveBtn.className = "w-full bg-[#003366] hover:bg-slate-900 text-white font-bold py-2.5 rounded-lg text-sm transition-colors shadow-sm active:scale-[0.99] uppercase tracking-wider";
-                }
             } else {
                 const id = Date.now().toString();
                 db.collection("trailerPlans").doc(id).set({
@@ -1242,6 +1250,8 @@
                     spz: spz || "BEZ SPZ",
                     deliveries: [...draftDeliveries],
                     pickups: [...draftPickups]
+                }).then(() => {
+                    closeTrailerModal();
                 }).catch(e => alert("Chyba při uložení: " + e.message));
             }
 
@@ -1274,20 +1284,20 @@
             }
 
             plansList.innerHTML = dayPlans.map(p => `
-                <div class="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-2 flex items-center justify-between gap-3 text-xs shadow-sm hover:border-[#003366] transition-colors">
+                <div class="bg-[#1e293b] text-white rounded-lg p-2.5 flex items-center justify-between gap-3 text-xs shadow-sm hover:border-[#003366] transition-colors">
                     <!-- 1. Řidič & SPZ -->
                     <div class="w-1/4 min-w-0 shrink-0">
                         <span class="text-[8px] font-bold text-slate-400 block tracking-wider truncate">${p.spz && p.spz !== 'BEZ SPZ' ? p.spz : 'BEZ SPZ'}</span>
-                        <h4 class="font-black text-[#003366] dark:text-blue-300 uppercase truncate leading-tight">${p.driver}</h4>
+                        <h4 class="font-black text-slate-100 uppercase truncate leading-tight">${p.driver}</h4>
                     </div>
                     
                     <!-- 2. Rozvozové firmy -->
                     <div class="flex-1 min-w-0">
-                        <span class="text-[8px] font-black text-blue-500 uppercase tracking-widest block mb-0.5">ROZVOZ</span>
+                        <span class="text-[8px] font-black text-blue-400 uppercase tracking-widest block mb-0.5">ROZVOZ</span>
                         <div class="flex flex-wrap gap-1">
                             ${p.deliveries && p.deliveries.length > 0 
-                                ? p.deliveries.map(d => `<span class="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-blue-200 dark:border-blue-800 truncate max-w-[80px]" title="${d}">${d}</span>`).join('')
-                                : '<span class="text-[9px] text-gray-400 italic">--</span>'
+                                ? p.deliveries.map(d => `<span class="bg-blue-900/60 text-blue-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-blue-800 truncate max-w-[80px]" title="${d}">${d}</span>`).join('')
+                                : '<span class="text-[9px] text-slate-500 italic">--</span>'
                             }
                         </div>
                     </div>
@@ -1297,15 +1307,15 @@
                         <span class="text-[8px] font-black text-emerald-600 uppercase tracking-widest block mb-0.5">SVOZ</span>
                         <div class="flex flex-wrap gap-1">
                             ${p.pickups && p.pickups.length > 0 
-                                ? p.pickups.map(s => `<span class="bg-green-50 dark:bg-green-900/40 text-emerald-700 dark:text-emerald-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-green-200 dark:border-green-800 truncate max-w-[80px]" title="${s}">${s}</span>`).join('')
-                                : '<span class="text-[9px] text-gray-400 italic">--</span>'
+                                ? p.pickups.map(s => `<span class="bg-green-900/60 text-emerald-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-green-800 truncate max-w-[80px]" title="${s}">${s}</span>`).join('')
+                                : '<span class="text-[9px] text-slate-500 italic">--</span>'
                             }
                         </div>
                     </div>
 
                     <!-- 4. Rychlé akce (Editace / Smazání) -->
                     <div class="flex items-center gap-2 shrink-0">
-                        <button onclick="editTrailerPlan('${p.id}')" class="text-[10px] text-amber-600 hover:underline font-bold uppercase tracking-wider">upravit</button>
+                        <button onclick="editTrailerPlan('${p.id}')" class="text-[10px] text-amber-500 hover:underline font-bold uppercase tracking-wider">upravit</button>
                         <button onclick="deleteTrailerPlan('${p.id}')" class="text-red-500 hover:text-red-700 transition-colors" title="Odstranit">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
