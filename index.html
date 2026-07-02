@@ -10,7 +10,7 @@
     <!-- PWA podpora pro iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link class="apple-touch-icon" href="icon-192.png">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -88,44 +88,46 @@
 <body class="bg-gray-100 font-sans antialiased text-gray-900">
 
     <!-- Záhlaví s integrovaným kalendářem -->
-    <header class="bg-white text-slate-900 p-3 shadow-md sticky top-0 z-20 border-b-4 border-[#003366] flex justify-between items-center gap-2">
-        <div class="flex items-center gap-2.5 min-w-0">
-            <img src="geis-logo.png" alt="Geis Logo" class="h-8 w-auto object-contain shrink-0" onerror="this.style.display='none'">
-            <div class="leading-tight min-w-0">
-                <div class="flex items-center gap-2">
-                    <h1 class="text-xs font-black tracking-tight text-[#003366] uppercase">Geis Svozy</h1>
-                    <!-- Tlačítko přepínání tmavého vzhledu -->
-                    <button onclick="toggleDarkMode()" class="text-gray-500 hover:text-[#003366] focus:outline-none" title="Přepnout tmavý/světlý režim">
-                        <svg id="themeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                        </svg>
-                    </button>
+    <header class="bg-white text-slate-900 p-3 shadow-md sticky top-0 z-20 border-b-4 border-[#003366] flex flex-col gap-2">
+        <div class="flex justify-between items-center gap-2">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <img src="geis-logo.png" alt="Geis Logo" class="h-8 w-auto object-contain shrink-0" onerror="this.style.display='none'">
+                <div class="leading-tight min-w-0">
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xs font-black tracking-tight text-[#003366] uppercase">Geis Svozy</h1>
+                        <!-- Tlačítko přepínání tmavého vzhledu -->
+                        <button onclick="toggleDarkMode()" class="text-gray-500 hover:text-[#003366] focus:outline-none" title="Přepnout tmavý/světlý režim">
+                            <svg id="themeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-wider truncate cursor-pointer hover:text-[#003366] active:scale-95 transition-transform" 
+                       id="currentDateDisplay" onclick="jumpToToday()" title="Skočit na dnešek"></p>
                 </div>
-                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-wider truncate cursor-pointer hover:text-[#003366] active:scale-95 transition-transform" 
-                   id="currentDateDisplay" onclick="jumpToToday()" title="Skočit na dnešek"></p>
+            </div>
+
+            <!-- Kompaktní ovládání kalendáře -->
+            <div id="headerDateControls" class="flex items-center gap-1 shrink-0">
+                <button onclick="stepDate(-1)" class="w-7 h-7 flex items-center justify-center bg-gray-50 active:bg-gray-200 border border-gray-200 rounded text-[9px] font-bold text-slate-700 shadow-sm transition-colors">◀</button>
+                <input type="date" id="appDatePicker" onchange="setDate(this.value)" class="h-7 text-[10px] font-bold text-[#003366] border border-gray-300 rounded px-1.5 bg-white text-center focus:outline-none shadow-sm cursor-pointer w-[95px] sm:w-[110px]">
+                <button onclick="stepDate(1)" class="w-7 h-7 flex items-center justify-center bg-gray-50 active:bg-gray-200 border border-gray-200 rounded text-[9px] font-bold text-slate-700 shadow-sm transition-colors">▶</button>
             </div>
         </div>
 
-        <!-- Kompaktní ovládání kalendáře -->
-        <div id="headerDateControls" class="flex items-center gap-1 shrink-0">
-            <button onclick="stepDate(-1)" class="w-7 h-7 flex items-center justify-center bg-gray-50 active:bg-gray-200 border border-gray-200 rounded text-[9px] font-bold text-slate-700 shadow-sm transition-colors">◀</button>
-            <input type="date" id="appDatePicker" onchange="setDate(this.value)" class="h-7 text-[10px] font-bold text-[#003366] border border-gray-300 rounded px-1.5 bg-white text-center focus:outline-none shadow-sm cursor-pointer w-[95px] sm:w-[110px]">
-            <button onclick="stepDate(1)" class="w-7 h-7 flex items-center justify-center bg-gray-50 active:bg-gray-200 border border-gray-200 rounded text-[9px] font-bold text-slate-700 shadow-sm transition-colors">▶</button>
+        <!-- Globální vyhledávací pole -->
+        <div class="flex justify-end p-2 bg-gray-50 border-b border-gray-200 relative dark:bg-slate-900 dark:border-slate-800" id="globalSearchContainer">
+            <div class="relative w-48">
+                <input type="text" id="globalDriverSearch" oninput="performGlobalDriverSearch(this.value)" placeholder="Vyhledat řidiče" class="w-full bg-gray-50 border border-gray-300 rounded-lg py-1 px-2.5 pr-8 text-xs font-bold outline-none focus:border-[#003366] uppercase text-[#003366]">
+                <span class="absolute right-2.5 top-1.5 text-gray-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </span>
+            </div>
+            
+            <!-- Plovoucí karta výsledků vyhledávání -->
+            <div id="globalSearchResults" class="absolute right-4 top-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 p-3 max-w-sm w-72 hidden z-30"></div>
         </div>
     </header>
-
-    <!-- Globální vyhledávací pole -->
-    <div class="flex justify-end p-2 bg-gray-50 border-b border-gray-200 relative dark:bg-slate-900 dark:border-slate-800" id="globalSearchContainer">
-        <div class="relative w-48">
-            <input type="text" id="globalDriverSearch" oninput="performGlobalDriverSearch(this.value)" placeholder="Vyhledat řidiče" class="w-full bg-white border border-gray-300 rounded-lg py-1 px-2.5 pr-8 text-xs font-bold outline-none focus:border-[#003366] uppercase text-[#003366] dark:bg-slate-800 dark:border-slate-700 dark:text-blue-300">
-            <span class="absolute right-2.5 top-1.5 text-gray-400">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </span>
-        </div>
-        
-        <!-- Plovoucí karta výsledků vyhledávání -->
-        <div id="globalSearchResults" class="absolute right-4 top-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 p-3 max-w-sm w-72 hidden z-30"></div>
-    </div>
 
     <!-- Mřížka sledování odběru -->
     <main id="tab-counter" class="active-tab p-4 space-y-5">
@@ -189,7 +191,7 @@
                     NOVÝ PLÁN
                 </button>
             </div>
-            <div id="trailerPlansList" class="space-y-2"></div>
+            <div id="trailerPlansList" class="space-y-1.5"></div>
         </div>
 
         <!-- EDITAČNÍ / NOVÉ OKNO PLÁNOVÁNÍ (Skryté v základu) -->
@@ -229,7 +231,7 @@
 
                     <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
                         <div class="flex justify-between items-center mb-1.5">
-                            <label class="text-[11px] font-semibold text-[#688a10] uppercase">Svoz</label>
+                            <label class="text-[11px] font-semibold text-emerald-700 uppercase">Svoz</label>
                             <button onclick="quickAddCustomer('pickup')" class="text-xs text-[#003366] hover:underline font-black uppercase tracking-wider py-1 px-2 bg-green-50 rounded border border-green-150 shadow-sm">+ Nový svoz</button>
                         </div>
                         <div class="flex gap-2">
@@ -370,7 +372,7 @@
         </div>
     </main>
 
-    <!-- Spodní menu -->
+    <!-- Menu se spodními bezpečnými zónami iOS -->
     <nav class="fixed bottom-0 w-full bg-white border-t border-gray-200 p-3 flex justify-around shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] pb-safe z-10">
         <button id="nav-counter" onclick="switchTab('counter', event)" class="text-[#003366] flex flex-col items-center transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
@@ -394,7 +396,7 @@
     </nav>
 
     <script>
-        // Vaše konfigurace databáze Firebase
+        // Vaše konfigurace Firebase
         const firebaseConfig = {
           apiKey: "AIzaSyDFYGCL-G3cd-nd5OkqOgc5laK-MsYACVk",
           authDomain: "geis---svozy.firebaseapp.com",
@@ -425,6 +427,7 @@
         let localPickups = [];
         let localTrailerPlans = [];
 
+        // Dark Mode logika
         function toggleDarkMode() {
             const isDark = document.body.classList.toggle('dark-mode');
             localStorage.setItem('darkMode', isDark);
@@ -621,7 +624,7 @@
             if (trailerPlans.length === 0 && pickups.length === 0) {
                 resultsContainer.innerHTML = `
                     <div class="text-xs text-gray-400 italic text-center py-2">
-                        Žágny řidič '${q}' pro tento den nenalezen.
+                        Žádný řidič '${q}' pro tento den nenalezen.
                     </div>`;
                 resultsContainer.classList.remove('hidden');
                 return;
@@ -895,48 +898,55 @@
                 const driversWithPickups = tPickups.filter(p => p.id !== editingPickupId).map(p => p.driver);
                 const availableDrivers = driversList.filter(d => !driversWithPickups.includes(d));
 
-                let driverOptions = availableDrivers.map(d => `<option value="${d}">${d}</option>`).join('');
-                
-                const isEditing = (editingPickupId !== null);
-                const btnLabel = isEditing ? 'Uložit změny nakládky' : 'Potvrdit naložení a odečíst';
-                const btnColor = isEditing ? 'bg-amber-600 hover:bg-amber-700' : 'bg-[#003366] hover:bg-slate-900';
+                if (availableDrivers.length > 0) {
+                    let driverOptions = availableDrivers.map(d => `<option value="${d}">${d}</option>`).join('');
+                    
+                    const isEditing = (editingPickupId !== null);
+                    const btnLabel = isEditing ? 'Uložit změny nakládky' : 'Potvrdit naložení a odečíst';
+                    const btnColor = isEditing ? 'bg-amber-600 hover:bg-amber-700' : 'bg-[#003366] hover:bg-slate-900';
 
-                // Rozvržení upraveno přesně podle zaslaného nákresu dispečera
-                formContainer.innerHTML = `
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-inner space-y-4">
-                        <!-- 1. Řádek: Titulek vlevo, výběr řidiče vpravo -->
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-black text-[#003366] uppercase tracking-wider">${isEditing ? 'Upravit zadanou nakládku' : 'Zapsat nakládku řidiče'}</span>
-                            <select id="modalDriverSelect" class="bg-white border border-gray-300 rounded-lg px-2.5 py-1 text-xs font-bold text-slate-700 outline-none shadow-sm focus:border-[#003366] w-36">
-                                ${driverOptions}
-                            </select>
-                        </div>
-                        
-                        <!-- 2. Řádek: Prostorná, samostatná bílá pole (FP, KH, PK) -->
-                        <div class="grid grid-cols-3 gap-2">
-                            <div>
-                                <input type="number" id="modalPickupFP" placeholder="FP" min="0" class="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-sm text-center font-bold text-slate-800 shadow-sm focus:border-[#003366] focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                    // Rozvržení upraveno přesně podle zaslaného nákresu dispečera
+                    formContainer.innerHTML = `
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-inner space-y-4">
+                            <!-- 1. Řádek: Titulek vlevo, výběr řidiče vpravo -->
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] font-black text-[#003366] uppercase tracking-wider">${isEditing ? 'Upravit zadanou nakládku' : 'Zapsat nakládku řidiče'}</span>
+                                <select id="modalDriverSelect" class="bg-white border border-gray-300 rounded-lg px-2.5 py-1 text-xs font-bold text-slate-700 outline-none shadow-sm focus:border-[#003366] w-36">
+                                    ${driverOptions}
+                                </select>
                             </div>
-                            <div>
-                                <input type="number" id="modalPickupKH" placeholder="KH" min="0" class="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-sm text-center font-bold text-slate-800 shadow-sm focus:border-[#003366] focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                            
+                            <!-- 2. Řádek: Prostorná, samostatná bílá pole (FP, KH, PK) -->
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <input type="number" id="modalPickupFP" placeholder="FP" min="0" class="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-sm text-center font-bold text-slate-800 shadow-sm focus:border-[#003366] focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                                </div>
+                                <div>
+                                    <input type="number" id="modalPickupKH" placeholder="KH" min="0" class="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-sm text-center font-bold text-slate-800 shadow-sm focus:border-[#003366] focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                                </div>
+                                <div>
+                                    <input type="number" id="modalPickupPK" placeholder="PK" min="0" class="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-sm text-center font-bold text-slate-800 shadow-sm focus:border-[#003366] focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                                </div>
                             </div>
-                            <div>
-                                <input type="number" id="modalPickupPK" placeholder="PK" min="0" class="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-sm text-center font-bold text-slate-800 shadow-sm focus:border-[#003366] focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
-                            </div>
-                        </div>
-                        
-                        <!-- 3. Řádek: Akční tlačítko pro uložení / storno -->
-                        <div class="flex flex-col gap-2">
-                            <button onclick="saveModalPickup('${t.id}')" class="w-full ${btnColor} text-white text-xs font-bold py-3 rounded-lg active:scale-[0.99] transition-transform shadow-sm uppercase tracking-wider">
-                                ${btnLabel}
-                            </button>
-                            ${isEditing ? `
-                                <button onclick="cancelPickupEdit()" class="w-full bg-gray-200 hover:bg-gray-300 text-slate-700 text-xs font-bold py-2 rounded-lg active:scale-[0.99] transition-transform shadow-sm uppercase tracking-wider">
-                                    Zrušit úpravu
+                            
+                            <!-- 3. Řádek: Akční tlačítko pro uložení / storno -->
+                            <div class="flex flex-col gap-2">
+                                <button onclick="saveModalPickup('${t.id}')" class="w-full ${btnColor} text-white text-xs font-bold py-3 rounded-lg active:scale-[0.99] transition-transform shadow-sm uppercase tracking-wider">
+                                    ${btnLabel}
                                 </button>
-                            ` : ''}
-                        </div>
-                    </div>`;
+                                ${isEditing ? `
+                                    <button onclick="cancelPickupEdit()" class="w-full bg-gray-200 hover:bg-gray-300 text-slate-700 text-xs font-bold py-2 rounded-lg active:scale-[0.99] transition-transform shadow-sm uppercase tracking-wider">
+                                        Zrušit úpravu
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>`;
+                } else {
+                    formContainer.innerHTML = `
+                        <div class="bg-amber-50 border border-amber-300 p-3.5 rounded-xl text-center text-xs text-amber-800 font-medium">
+                            Všichni dostupní smluvní řidiči již u tohoto zákazníka dnes nakládali.
+                        </div>`;
+                }
             } else {
                 formContainer.innerHTML = `
                     <div class="bg-[#e6f0fa] border border-[#003366] p-4 rounded-xl text-center shadow-sm">
