@@ -10,7 +10,7 @@
     <!-- PWA podpora pro iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link class="apple-touch-icon" href="icon-192.png">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -168,10 +168,17 @@
         <div>
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                 <h3 class="font-bold text-[#003366] text-xs uppercase tracking-wider">Aktivní sledování odběru</h3>
-                <div class="flex bg-gray-200/70 p-0.5 rounded-lg text-xs font-semibold self-start sm:self-auto shadow-inner">
-                    <button onclick="setGridFilter('all')" id="filter-all" class="px-3 py-1 rounded-md transition-all bg-white text-slate-800 shadow-sm">Všechny</button>
-                    <button onclick="setGridFilter('pending')" id="filter-pending" class="px-3 py-1 rounded-md transition-all text-gray-500 hover:text-slate-800">Čekající</button>
-                    <button onclick="setGridFilter('done')" id="filter-done" class="px-3 py-1 rounded-md transition-all text-gray-500 hover:text-slate-800">Dokončené</button>
+                <div class="flex items-center gap-2 self-start sm:self-auto">
+                    <!-- Tlačítko pro export detailních denních dat svozu -->
+                    <button onclick="exportDailyDetailedToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold py-1 px-2.5 rounded-lg flex items-center gap-1 shadow-sm transition-colors uppercase">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Export dne
+                    </button>
+                    <div class="flex bg-gray-200/70 p-0.5 rounded-lg text-xs font-semibold shadow-inner">
+                        <button onclick="setGridFilter('all')" id="filter-all" class="px-3 py-1 rounded-md transition-all bg-white text-slate-800 shadow-sm">Všechny</button>
+                        <button onclick="setGridFilter('pending')" id="filter-pending" class="px-3 py-1 rounded-md transition-all text-gray-500 hover:text-slate-800">Čekající</button>
+                        <button onclick="setGridFilter('done')" id="filter-done" class="px-3 py-1 rounded-md transition-all text-gray-500 hover:text-slate-800">Dokončené</button>
+                    </div>
                 </div>
             </div>
             
@@ -1105,12 +1112,8 @@
                 const isDone = item.isDone;
                 const pct = item.progressPercent;
 
-                // Dynamická barva postupu (Červená jako nehotový základ, Zelená jako hotová část)
-                const barColorClass = pct >= 100 ? 'bg-emerald-500' : (pct > 32 ? 'bg-amber-500' : 'bg-red-500');
-
                 let tileHtml = '';
                 if (isDone) {
-                    // Dokončený svoz se zabarví celý elegantně do krásnější pastelové Geis zelené
                     tileHtml = `
                     <div onclick="openDetails('${t.id}')" class="bg-[#ecfdf5] dark:bg-emerald-950/40 border-l-[3px] border-[#96c11f] border-y border-r border-gray-200 dark:border-slate-700 rounded-lg p-2 shadow-sm active:scale-95 transition-all cursor-pointer flex flex-col justify-between h-[72px]">
                         <div class="font-bold text-emerald-800 dark:text-emerald-300 text-xs truncate flex justify-between items-center">
@@ -1138,7 +1141,6 @@
                             </span>
                         </div>
                         
-                        <!-- Červeno-zelená stavová lišta svozu (červený nehotový základ, zelená hotová část) -->
                         <div class="w-full bg-red-500 h-1.5 rounded-full mt-1.5 overflow-hidden">
                             <div class="bg-emerald-500 h-1.5 transition-all duration-300" style="width: ${pct}%"></div>
                         </div>
@@ -1514,6 +1516,54 @@
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = `geis_export_${periodText}_${getTodayStr()}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // --- EXPORT AKTIVNÍHO DNE (SVOZY + ŘIDIČI + NÁVĚSY) ---
+        function exportDailyDetailedToExcel() {
+            const targets = localDailyTargets.filter(t => t.date === activeDate);
+            if (targets.length === 0) {
+                alert("Pro tento vybraný den neexistují žádná zadaná data svozu k exportu.");
+                return;
+            }
+
+            // CSV hlavička a formátování kompatibilní s Excelem
+            let csvContent = "MĚŘENÍ ODBĚRU - DETAILNÍ DENNÍ SVOD: " + formatDateToCzech(activeDate) + "\n\n";
+            csvContent += "Zákazník;Plán FP;Plán KH;Plán PK;Řidič (nakládka);Odvezeno FP;Odvezeno KH;Odvezeno PK;Čas zápisu\n";
+
+            targets.forEach(t => {
+                const tPickups = localPickups.filter(p => p.targetId === t.id);
+                if (tPickups.length === 0) {
+                    // Cíl byl zapsán, ale ještě nikdo neodvezl nic
+                    csvContent += `${t.customer};${t.targetFP};${t.targetKH};${t.targetPK || 0};-;0;0;0;-\n`;
+                } else {
+                    // Každá naložená jízda u zákazníka bude v samostatném řádku
+                    tPickups.forEach(p => {
+                        const timeStr = p.timestamp ? new Date(p.timestamp).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' }) : '-';
+                        csvContent += `${t.customer};${t.targetFP};${t.targetKH};${t.targetPK || 0};${p.driver};${p.fp};${p.kh};${p.pk || 0};${timeStr}\n`;
+                    });
+                }
+            });
+
+            // Přidání denního plánu návěsů na konec stejného listu
+            const dayTrailers = localTrailerPlans.filter(p => p.date === activeDate);
+            if (dayTrailers.length > 0) {
+                csvContent += "\n\nDENNÍ PLÁNY NASAZENÍ NÁVĚSŮ (33 EUR)\n";
+                csvContent += "Řidič návěsu;SPZ Návěsu;Přidělené Rozvozy;Přidělené Svozy\n";
+                dayTrailers.forEach(p => {
+                    const deliveriesStr = p.deliveries && p.deliveries.length > 0 ? p.deliveries.join(", ") : "-";
+                    const pickupsStr = p.pickups && p.pickups.length > 0 ? p.pickups.join(", ") : "-";
+                    csvContent += `${p.driver};${p.spz || "BEZ SPZ"};${deliveriesStr};${pickupsStr}\n`;
+                });
+            }
+
+            // Export s českou diakritikou (BOM)
+            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `geis_svoz_den_${activeDate}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
