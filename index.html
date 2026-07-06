@@ -332,48 +332,121 @@
         <div id="statsContent" class="space-y-4"></div>
     </main>
 
-    <!-- Nastavení -->
-    <main id="tab-settings" class="hidden-tab p-4 space-y-6">
-        <!-- Rozvozoví zákazníci -->
-        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Rozvozoví Zákazníci (Návěsy)</h2>
-            <div class="flex space-x-2 mb-3">
-                <input type="text" id="newCustomerDeliveryName" placeholder="Název rozvozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366]">
-                <button onclick="addItem('customersDelivery', 'newCustomerDeliveryName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
-            </div>
-            <div id="settingsCustomersDeliveryList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
-        </div>
+    <!-- Nastavení (sbalitelné akordeony a karty řidičů) -->
+    <main id="tab-settings" class="hidden-tab p-4 space-y-3">
+        
+        <!-- NOVINKA: KARTA ŘIDIČE -->
+        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group" id="details-driver-cards" open>
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+                <span class="flex items-center gap-1.5">📇 Karty řidičů (Detaily & Volání)</span>
+                <span class="transition-transform group-open:rotate-180 text-gray-400">▼</span>
+            </summary>
+            <div class="p-4 space-y-4">
+                <div class="bg-gray-50 dark:bg-slate-900 p-3.5 rounded-xl border border-gray-200 dark:border-slate-800 space-y-3">
+                    <input type="hidden" id="editDriverCardId" value="">
+                    <h4 id="driverCardFormTitle" class="text-xs font-black text-[#003366] dark:text-blue-300 uppercase tracking-wide">Nový profil řidiče</h4>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Jméno řidiče</label>
+                            <input type="text" id="driverCardName" placeholder="Např. VRABEC" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366]">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">SPZ Vozidla</label>
+                            <input type="text" id="driverCardSPZ" placeholder="Např. 3H1 1234" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366]">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Dopravce</label>
+                            <input type="text" id="driverCardCarrier" placeholder="Např. Vlastní / Geis Partner" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366]">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Telefonní číslo</label>
+                            <input type="tel" id="driverCardPhone" placeholder="Např. +420 777 123 456" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366]">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Velikost vozidla</label>
+                            <input type="text" id="driverCardSize" placeholder="Např. Solo 18t, Návěs 33 EUR, Dodávka" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366]">
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button onclick="saveDriverCard()" class="flex-1 bg-[#003366] hover:bg-black text-white py-2 rounded-lg font-bold text-xs transition-colors uppercase tracking-wider">
+                            Uložit kartu řidiče
+                        </button>
+                        <button id="btnCancelDriverCard" onclick="clearDriverCardForm()" class="hidden bg-gray-200 hover:bg-gray-300 text-slate-700 px-3 py-2 rounded-lg font-bold text-xs transition-colors uppercase tracking-wider">
+                            Zrušit
+                        </button>
+                    </div>
+                </div>
 
-        <!-- Svozoví zákazníci -->
-        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Svozoví Zákazníci (Mřížka & Návěsy)</h2>
-            <div class="flex space-x-2 mb-3">
-                <input type="text" id="newCustomerPickupName" placeholder="Název svozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366]">
-                <button onclick="addItem('customersPickup', 'newCustomerPickupName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
+                <!-- Seznam karet řidičů -->
+                <div id="settingsDriverCardsList" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
             </div>
-            <div id="settingsCustomersPickupList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
-        </div>
+        </details>
 
-        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Řidiči (Návěsy 33 EUR)</h2>
-            <div class="flex space-x-2 mb-3">
-                <input type="text" id="newInternalDriverName" placeholder="Jméno řidiče" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366]">
-                <button onclick="addItem('internalDrivers', 'newInternalDriverName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
+        <!-- Sbalitelní Rozvozoví zákazníci -->
+        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
+                <span>Rozvozoví Zákazníci (Návěsy)</span>
+                <span class="transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
+                <div class="flex space-x-2 mt-3">
+                    <input type="text" id="newCustomerDeliveryName" placeholder="Název rozvozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366]">
+                    <button onclick="addItem('customersDelivery', 'newCustomerDeliveryName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
+                </div>
+                <div id="settingsCustomersDeliveryList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
             </div>
-            <div id="settingsInternalDriversList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
-        </div>
+        </details>
 
-        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Smluvní řidiči (Běžný svoz)</h2>
-            <div class="flex space-x-2 mb-3">
-                <input type="text" id="newDriverName" placeholder="Jméno řidiče" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366]">
-                <button onclick="addItem('drivers', 'newDriverName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
+        <!-- Sbalitelní Svozoví zákazníci -->
+        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
+                <span>Svozoví Zákazníci (Mřížka & Návěsy)</span>
+                <span class="transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
+                <div class="flex space-x-2 mt-3">
+                    <input type="text" id="newCustomerPickupName" placeholder="Název svozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366]">
+                    <button onclick="addItem('customersPickup', 'newCustomerPickupName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
+                </div>
+                <div id="settingsCustomersPickupList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
             </div>
-            <div id="settingsDriversList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
-        </div>
+        </details>
 
+        <!-- Sbalitelní Řidiči (Návěsy) -->
+        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
+                <span>Řidiči (Návěsy 33 EUR)</span>
+                <span class="transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
+                <div class="flex space-x-2 mt-3">
+                    <input type="text" id="newInternalDriverName" placeholder="Jméno řidiče" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366]">
+                    <button onclick="addItem('internalDrivers', 'newInternalDriverName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
+                </div>
+                <div id="settingsInternalDriversList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
+            </div>
+        </details>
+
+        <!-- Sbalitelní Smluvní řidiči -->
+        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
+                <span>Smluvní řidiči (Běžný svoz)</span>
+                <span class="transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
+                <div class="flex space-x-2 mt-3">
+                    <input type="text" id="newDriverName" placeholder="Jméno řidiče" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366]">
+                    <button onclick="addItem('drivers', 'newDriverName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
+                </div>
+                <div id="settingsDriversList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
+            </div>
+        </details>
+
+        <!-- Zálohování a přenos -->
         <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200 space-y-3">
-            <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider">Zálohování a Přenos Dat</h2>
+            <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Zálohování a Přenos Dat</h2>
             <p class="text-xs text-gray-500">Zálohujte si data, abyste o ně nepřišli při promazání prohlížeče nebo pro přenos do jiného telefonu.</p>
             <div class="grid grid-cols-2 gap-2">
                 <button onclick="exportData()" class="bg-[#003366] hover:bg-black text-white text-xs font-bold py-2.5 rounded-lg transition-colors shadow-sm">
@@ -441,6 +514,7 @@
         let localDailyTargets = [];
         let localPickups = [];
         let localTrailerPlans = [];
+        let localDriverCards = []; // Lokální úložiště pro Karty řidičů
 
         // Dark Mode logika
         function toggleDarkMode() {
@@ -564,6 +638,16 @@
             renderTrailersTab();
         });
 
+        // Přímá synchronizace Karet řidičů z Firebase
+        db.collection("driverCards").onSnapshot((snapshot) => {
+            localDriverCards = [];
+            snapshot.forEach((doc) => {
+                localDriverCards.push({ docId: doc.id, ...doc.data() });
+            });
+            localStorage.setItem('driverCards', JSON.stringify(localDriverCards));
+            renderDriverCardsList();
+        });
+
         function populateAllDropdowns() {
             const custPickup = sortAlphabetically(JSON.parse(localStorage.getItem('customersPickup')) || []);
             const custDelivery = sortAlphabetically(JSON.parse(localStorage.getItem('customersDelivery')) || []);
@@ -597,7 +681,6 @@
             }
         }
 
-        // Ochrana iOS Safari s odloženým zpožděním 100 ms k vyčištění nativní volby
         function autoAddDraftCustomer(type, selectEl) {
             const customer = selectEl.value;
             if (!customer) return;
@@ -618,7 +701,7 @@
             }, 100);
         }
 
-        // Globální vyhledávací systém navržený dispečerem
+        // Globální vyhledávací systém
         function performGlobalDriverSearch(query) {
             const resultsContainer = document.getElementById('globalSearchResults');
             if (!resultsContainer) return;
@@ -636,7 +719,10 @@
             const todayTargetIds = localDailyTargets.filter(t => t.date === activeDate).map(t => t.id);
             const pickups = localPickups.filter(p => todayTargetIds.includes(p.targetId) && p.driver.includes(q));
 
-            if (trailerPlans.length === 0 && pickups.length === 0) {
+            // Hledání v kartách řidičů
+            const matchedCards = localDriverCards.filter(c => c.name.toUpperCase().includes(q));
+
+            if (trailerPlans.length === 0 && pickups.length === 0 && matchedCards.length === 0) {
                 resultsContainer.innerHTML = `
                     <div class="text-xs text-gray-400 italic text-center py-2">
                         Žádný řidič '${q}' pro tento den nenalezen.
@@ -651,6 +737,27 @@
                     <span class="text-[10px] font-black text-[#003366] dark:text-blue-300 uppercase">Výsledky vyhledávání</span>
                     <button onclick="clearGlobalSearch()" class="text-xs text-gray-400 font-bold hover:text-red-500">✕ Zavřít</button>
                 </div>`;
+
+            // Pokud existuje uložená Karta řidiče, zobrazíme ji na prvním místě s přímým vytáčením
+            if (matchedCards.length > 0) {
+                html += `
+                <div>
+                    <span class="text-[9px] font-bold text-amber-500 uppercase tracking-wider block mb-1">Dohledané Karty Řidičů</span>`;
+                matchedCards.forEach(c => {
+                    const cleanPhone = c.phone ? c.phone.replace(/\s+/g, '') : '';
+                    const phoneBtn = cleanPhone 
+                        ? `<a href="tel:${cleanPhone}" class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 font-bold px-2 py-1 rounded text-[11px] mt-1.5 hover:bg-emerald-100 transition-colors">📞 Zavolat (${c.phone})</a>`
+                        : `<span class="text-gray-400 text-[10px] italic block mt-1">Bez zadaného telefonu</span>`;
+
+                    html += `
+                    <div class="text-xs border border-amber-200 p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 mb-1.5">
+                        <p class="font-bold text-slate-800 dark:text-slate-100">${c.name} ${c.spz ? `(${c.spz})` : ''}</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-300 mt-0.5">Dopravce: <b>${c.carrier || '-'}</b> | Velikost: <b>${c.vehicleSize || '-'}</b></p>
+                        ${phoneBtn}
+                    </div>`;
+                });
+                html += `</div>`;
+            }
 
             if (trailerPlans.length > 0) {
                 html += `
@@ -775,6 +882,7 @@
                 customersPickup: JSON.parse(localStorage.getItem('customersPickup')) || [],
                 drivers: JSON.parse(localStorage.getItem('drivers')) || [],
                 internalDrivers: JSON.parse(localStorage.getItem('internalDrivers')) || [],
+                driverCards: localDriverCards, // Včetně nových karet řidičů
                 dailyTargets: localDailyTargets,
                 pickups: localPickups,
                 trailerPlans: localTrailerPlans
@@ -816,6 +924,12 @@
                         data.trailerPlans.forEach(tp => {
                             const { docId, ...rest } = tp;
                             db.collection("trailerPlans").doc(tp.id || docId).set(rest);
+                        });
+                    }
+                    if (data.driverCards && Array.isArray(data.driverCards)) {
+                        data.driverCards.forEach(dc => {
+                            const { docId, ...rest } = dc;
+                            db.collection("driverCards").doc(dc.id || docId).set(rest);
                         });
                     }
                     alert("Data byla úspěšně importována do databáze.");
@@ -881,7 +995,6 @@
             // Vyplnit formulář v modal okně
             const drvSelect = document.getElementById('modalDriverSelect');
             if (drvSelect) {
-                // Dočasně přidáme aktuálního řidiče do selectu, pokud by byl skrytý
                 if (!drvSelect.querySelector(`option[value="${p.driver}"]`)) {
                     drvSelect.innerHTML += `<option value="${p.driver}">${p.driver}</option>`;
                 }
@@ -892,7 +1005,6 @@
             document.getElementById('modalPickupKH').value = p.kh === 0 ? '' : p.kh;
             document.getElementById('modalPickupPK').value = (p.pk || 0) === 0 ? '' : (p.pk || 0);
 
-            // Překreslit ovládací prvky modálu do editačního režimu
             renderModalContent();
         }
 
@@ -901,7 +1013,7 @@
             renderModalContent();
         }
 
-        // Nové přehledné rozložení podle vašeho grafického návrhu (2. obrázek)
+        // Vykreslení modálního detailu zákazníka (s integrací volání řidičů)
         function renderModalContent() {
             if (!currentTargetId) return;
 
@@ -978,10 +1090,8 @@
                     const btnLabel = isEditing ? 'Uložit změny nakládky' : 'Potvrdit naložení a odečíst';
                     const btnColor = isEditing ? 'bg-amber-600 hover:bg-amber-700' : 'bg-[#003366] hover:bg-slate-900';
 
-                    // Rozvržení upraveno přesně podle zaslaného nákresu dispečera
                     formContainer.innerHTML = `
                         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-inner space-y-4">
-                            <!-- 1. Řádek: Titulek vlevo, výběr řidiče vpravo -->
                             <div class="flex justify-between items-center">
                                 <span class="text-[10px] font-black text-[#003366] uppercase tracking-wider">${isEditing ? 'Upravit zadanou nakládku' : 'Zapsat nakládku řidiče'}</span>
                                 <select id="modalDriverSelect" class="bg-white border border-gray-300 rounded-lg px-2.5 py-1 text-xs font-bold text-slate-700 outline-none shadow-sm focus:border-[#003366] w-36">
@@ -989,7 +1099,6 @@
                                 </select>
                             </div>
                             
-                            <!-- 2. Řádek: Prostorná, samostatná bílá pole (FP, KH, PK) -->
                             <div class="grid grid-cols-3 gap-2">
                                 <div>
                                     <input type="number" id="modalPickupFP" placeholder="FP" min="0" class="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-sm text-center font-bold text-slate-800 shadow-sm focus:border-[#003366] focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
@@ -1002,7 +1111,6 @@
                                 </div>
                             </div>
                             
-                            <!-- 3. Řádek: Akční tlačítko pro uložení / storno -->
                             <div class="flex flex-col gap-2">
                                 <button onclick="saveModalPickup('${t.id}')" class="w-full ${btnColor} text-white text-xs font-bold py-3 rounded-lg active:scale-[0.99] transition-transform shadow-sm uppercase tracking-wider">
                                     ${btnLabel}
@@ -1031,6 +1139,13 @@
             const historyContainer = document.getElementById('modalHistoryContainer');
             let historyHtml = '';
             tPickups.forEach(p => {
+                // Integrace: Najdeme zda má řidič zapsanou kartu s telefonem
+                const driverCard = localDriverCards.find(c => c.name.toUpperCase() === p.driver.toUpperCase());
+                const cleanPhone = driverCard && driverCard.phone ? driverCard.phone.replace(/\s+/g, '') : '';
+                const phoneButton = cleanPhone 
+                    ? `<a href="tel:${cleanPhone}" class="w-7 h-7 flex items-center justify-center bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold rounded-full transition-colors" title="Zavolat řidiči ${p.driver}">📞</a>`
+                    : '';
+
                 historyHtml += `
                 <div class="flex justify-between items-center text-xs bg-white p-2.5 rounded-lg border border-gray-200 shadow-sm">
                     <div class="flex flex-col">
@@ -1038,6 +1153,7 @@
                         <span class="text-[11px] text-gray-500 font-medium">Odvezl: <b>${p.fp} FP</b> | <b>${p.kh} KH</b> | <b>${p.pk || 0} PK</b></span>
                     </div>
                     <div class="flex items-center gap-2">
+                        ${phoneButton}
                         <button onclick="editPickup('${p.id}')" class="text-xs text-amber-600 hover:underline font-bold px-1">upravit</button>
                         <button onclick="deletePickup('${p.id}')" class="text-[#e30613] hover:text-red-800 font-bold px-1 text-sm" title="Stornovat nakládku">✕</button>
                     </div>
@@ -1055,7 +1171,6 @@
             if (fp === 0 && kh === 0 && pk === 0) { alert('Zadejte množství, které řidič skutečně naložil.'); return; }
 
             if (editingPickupId) {
-                // Přepsání stávající nakládky v cloudu
                 db.collection("pickups").doc(editingPickupId).update({
                     driver: driver.toUpperCase(),
                     fp: fp,
@@ -1065,7 +1180,6 @@
                     editingPickupId = null;
                 }).catch(e => alert("Chyba při ukládání: " + e.message));
             } else {
-                // Nová nakládka
                 const id = Date.now().toString();
                 db.collection("pickups").doc(id).set({
                     id: id,
@@ -1322,7 +1436,6 @@
             renderDraftLists();
         }
 
-        // Ultrakompaktní řádkový vzhled plánů návěsů (tabulkový typ)
         function renderTrailersTab() {
             const searchQuery = (document.getElementById('trailerDriverSearch')?.value || '').trim().toUpperCase();
             populateAllDropdowns();
@@ -1345,13 +1458,11 @@
 
             plansList.innerHTML = dayPlans.map(p => `
                 <div class="bg-[#1e293b] text-white rounded-lg p-2.5 flex items-center justify-between gap-3 text-xs shadow-sm hover:border-[#003366] transition-colors">
-                    <!-- 1. Řidič & SPZ -->
                     <div class="w-1/4 min-w-0 shrink-0">
                         <span class="text-[8px] font-bold text-slate-400 block tracking-wider truncate">${p.spz && p.spz !== 'BEZ SPZ' ? p.spz : 'BEZ SPZ'}</span>
                         <h4 class="font-black text-slate-100 uppercase truncate leading-tight">${p.driver}</h4>
                     </div>
                     
-                    <!-- 2. Rozvozové firmy -->
                     <div class="flex-1 min-w-0">
                         <span class="text-[8px] font-black text-blue-400 uppercase tracking-widest block mb-0.5">ROZVOZ</span>
                         <div class="flex flex-wrap gap-1">
@@ -1362,7 +1473,6 @@
                         </div>
                     </div>
 
-                    <!-- 3. Svozové firmy -->
                     <div class="flex-1 min-w-0">
                         <span class="text-[8px] font-black text-emerald-600 uppercase tracking-widest block mb-0.5">SVOZ</span>
                         <div class="flex flex-wrap gap-1">
@@ -1373,7 +1483,6 @@
                         </div>
                     </div>
 
-                    <!-- 4. Rychlé akce (Editace / Smazání) -->
                     <div class="flex items-center gap-2 shrink-0">
                         <button onclick="editTrailerPlan('${p.id}')" class="text-[10px] text-amber-500 hover:underline font-bold uppercase tracking-wider">upravit</button>
                         <button onclick="deleteTrailerPlan('${p.id}')" class="text-red-500 hover:text-red-700 transition-colors" title="Odstranit">
@@ -1587,7 +1696,6 @@
                 return;
             }
 
-            // CSV hlavička a formátování kompatibilní s Excelem
             let csvContent = "\ufeff";
             csvContent += "MĚŘENÍ ODBĚRU - DETAILNÍ DENNÍ SVOD: " + formatDateToCzech(activeDate) + "\n\n";
             csvContent += "Zákazník;Plán FP;Plán KH;Plán PK;Řidič (nakládka);Odvezeno FP;Odvezeno KH;Odvezeno PK;Čas zápisu\n";
@@ -1595,10 +1703,8 @@
             targets.forEach(t => {
                 const tPickups = localPickups.filter(p => p.targetId === t.id);
                 if (tPickups.length === 0) {
-                    // Cíl byl zapsán, ale ještě nikdo neodvezl nic
                     csvContent += `${t.customer};${t.targetFP};${t.targetKH};${t.targetPK || 0};-;0;0;0;-\n`;
                 } else {
-                    // Každá naložená jízda u zákazníka bude v samostatném řádku
                     tPickups.forEach(p => {
                         const timeStr = p.timestamp ? new Date(p.timestamp).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' }) : '-';
                         csvContent += `${t.customer};${t.targetFP};${t.targetKH};${t.targetPK || 0};${p.driver};${p.fp};${p.kh};${p.pk || 0};${timeStr}\n`;
@@ -1606,7 +1712,6 @@
                 }
             });
 
-            // Přidání denního plánu návěsů na konec stejného listu
             const dayTrailers = localTrailerPlans.filter(p => p.date === activeDate);
             if (dayTrailers.length > 0) {
                 csvContent += "\n\nDENNÍ PLÁNY NASAZENÍ NÁVĚSŮ (33 EUR)\n";
@@ -1618,7 +1723,6 @@
                 });
             }
 
-            // Export s českou diakritikou (BOM)
             const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
@@ -1648,6 +1752,8 @@
             document.getElementById('settingsCustomersPickupList').innerHTML = buildList(custPickup, 'customersPickup');
             document.getElementById('settingsDriversList').innerHTML = buildList(drvs, 'drivers');
             document.getElementById('settingsInternalDriversList').innerHTML = buildList(internalDrivers, 'internalDrivers');
+            
+            renderDriverCardsList(); // Obnovit seznam karet řidičů v nastavení
         }
 
         function addItem(key, inputId) {
@@ -1668,6 +1774,111 @@
             let list = JSON.parse(localStorage.getItem(key)) || [];
             list.splice(index, 1);
             db.collection("settings").doc(key).set({ list: list }).catch(e => alert("Chyba při mazání: " + e.message));
+        }
+
+        // LOGIKA PRO KARTY ŘIDIČE (Ukládání / Editace / Mazání)
+        function saveDriverCard() {
+            const idInput = document.getElementById('editDriverCardId');
+            const nameInput = document.getElementById('driverCardName');
+            const spzInput = document.getElementById('driverCardSPZ');
+            const carrierInput = document.getElementById('driverCardCarrier');
+            const phoneInput = document.getElementById('driverCardPhone');
+            const sizeInput = document.getElementById('driverCardSize');
+
+            const name = nameInput.value.trim().toUpperCase();
+            const spz = spzInput.value.trim().toUpperCase();
+            const carrier = carrierInput.value.trim();
+            const phone = phoneInput.value.trim();
+            const size = sizeInput.value.trim();
+
+            if (!name) { alert("Zadejte prosím jméno řidiče!"); return; }
+
+            const cardId = idInput.value || Date.now().toString();
+            
+            db.collection("driverCards").doc(cardId).set({
+                id: cardId,
+                name: name,
+                spz: spz,
+                carrier: carrier,
+                phone: phone,
+                vehicleSize: size
+            }).then(() => {
+                clearDriverCardForm();
+            }).catch(e => alert("Chyba při ukládání profilu řidiče: " + e.message));
+        }
+
+        function clearDriverCardForm() {
+            document.getElementById('editDriverCardId').value = '';
+            document.getElementById('driverCardName').value = '';
+            document.getElementById('driverCardSPZ').value = '';
+            document.getElementById('driverCardCarrier').value = '';
+            document.getElementById('driverCardPhone').value = '';
+            document.getElementById('driverCardSize').value = '';
+            document.getElementById('driverCardFormTitle').textContent = 'Nový profil řidiče';
+            document.getElementById('btnCancelDriverCard').classList.add('hidden');
+        }
+
+        function editDriverCard(cardId) {
+            const card = localDriverCards.find(c => c.id === cardId || c.docId === cardId);
+            if (!card) return;
+
+            document.getElementById('editDriverCardId').value = card.id || card.docId;
+            document.getElementById('driverCardName').value = card.name || '';
+            document.getElementById('driverCardSPZ').value = card.spz || '';
+            document.getElementById('driverCardCarrier').value = card.carrier || '';
+            document.getElementById('driverCardPhone').value = card.phone || '';
+            document.getElementById('driverCardSize').value = card.vehicleSize || '';
+
+            document.getElementById('driverCardFormTitle').textContent = 'Upravit profil řidiče';
+            document.getElementById('btnCancelDriverCard').classList.remove('hidden');
+        }
+
+        function deleteDriverCard(cardId) {
+            if (confirm("Opravdu chcete smazat tuto kartu řidiče?")) {
+                db.collection("driverCards").doc(cardId).delete();
+            }
+        }
+
+        function renderDriverCardsList() {
+            const listContainer = document.getElementById('settingsDriverCardsList');
+            if (!listContainer) return;
+
+            const cards = [...localDriverCards].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'cs'));
+            if (cards.length === 0) {
+                listContainer.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">Žádní uložené řidiči.</p>';
+                return;
+            }
+
+            listContainer.innerHTML = cards.map(c => {
+                const cleanPhone = c.phone ? c.phone.replace(/\s+/g, '') : '';
+                const phoneHtml = cleanPhone 
+                    ? `<a href="tel:${cleanPhone}" class="inline-flex items-center gap-1 bg-[#e6f0fa] hover:bg-blue-100 text-[#003366] font-bold px-2.5 py-1 rounded-lg text-[11px] transition-colors">
+                         📞 ${c.phone}
+                       </a>`
+                    : '<span class="text-gray-400 text-[11px] italic">Bez tel. čísla</span>';
+
+                return `
+                <div class="bg-white border border-gray-200 rounded-lg p-2.5 shadow-sm space-y-1.5 text-xs dark:bg-slate-800 dark:border-slate-700">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-black text-slate-800 dark:text-slate-100 uppercase">${c.name}</span>
+                            ${c.spz ? `<span class="bg-gray-100 text-gray-600 font-bold px-1.5 py-0.5 rounded ml-2 text-[10px] dark:bg-slate-700 dark:text-slate-200">${c.spz}</span>` : ''}
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="editDriverCard('${c.id}')" class="text-xs text-amber-600 hover:underline font-bold">Upravit</button>
+                            <button onclick="deleteDriverCard('${c.id}')" class="text-[#e30613] hover:text-red-700 font-bold text-sm">✕</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-1 text-[11px] text-gray-500 dark:text-gray-400">
+                        <p>Dopravce: <span class="font-semibold text-slate-700 dark:text-slate-200">${c.carrier || '-'}</span></p>
+                        <p>Vozidlo: <span class="font-semibold text-slate-700 dark:text-slate-200">${c.vehicleSize || '-'}</span></p>
+                    </div>
+                    <div class="pt-1.5 flex justify-between items-center border-t border-gray-100 dark:border-slate-700">
+                        <span class="text-[10px] text-gray-400 font-semibold uppercase">Přímé vytáčení:</span>
+                        ${phoneHtml}
+                    </div>
+                </div>`;
+            }).join('');
         }
 
         function switchTab(tabId, event) {
@@ -1704,7 +1915,6 @@
             if(tabId === 'settings') renderSettingsTab();
         }
 
-        // Pevná a správná inicializace kalendáře i záložky při spuštění (vyřeší chybějící datum)
         updateDateUI();
         switchTab('counter');
     </script>
