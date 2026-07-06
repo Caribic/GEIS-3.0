@@ -1670,7 +1670,51 @@
             link.click();
             document.body.removeChild(link);
         }
-    
+<script>
+        // TADY MÁTE SVÉ STÁVAJÍCÍ FUNKCE (např. firebaseConfig, atd.)
+        
+        // ...
+
+        // SEM VLOŽTE TU NOVOU FUNKCI:
+        function exportDailyDetailedToExcel() {
+            const data = localDailyTargets; 
+            
+            if (!data || data.length === 0) {
+                alert("Žádná data k exportu.");
+                return;
+            }
+
+            let csvContent = "\ufeff"; 
+            csvContent += "Datum;Zákazník;Řidič;FP;KH;PK\n";
+            
+            data.forEach(item => {
+                const row = [
+                    item.date || '',
+                    item.customer || '',
+                    item.driver || '',
+                    item.fp || '',
+                    item.kh || '',
+                    item.pk || ''
+                ].join(';');
+                
+                csvContent += row + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `svozy_export_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+    </script>
+</body>
+</html>
+
+        
     </script>
 </body>
 </html>
