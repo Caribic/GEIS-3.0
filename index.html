@@ -1,18 +1,3 @@
-Chyba v kódu spočívala v tom, že se na konci souboru nedopatřením překopírovaly
-a promíchaly části skriptu. Došlo k otevření značky <script> uprostřed
-stávajícího skriptu, k vícenásobnému definování funkce
-exportDailyDetailedToExcel a k duplicitnímu uzavření značek
-</script></body></html>. Tyto syntaktické chyby způsobily nefunkčnost celého
-souboru.
-
-Zde je kompletní, opravený a vyčištěný kód souboru index.html.
-
-Byla ponechána pokročilejší verze exportu (exportDailyDetailedToExcel), která
-správně páruje data o plánovaných svozech s reálnými nakládkami řidičů a na
-konec souboru přidává i denní rozpis návěsů pro vybraný den. Do skriptu byly
-rovněž doplněny chybějící funkce pro zálohování nastavení (exportData a
-importData), na které odkazuje sekce Nastavení.
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
