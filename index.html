@@ -1,3 +1,18 @@
+Chyba v kódu spočívala v tom, že se na konci souboru nedopatřením překopírovaly
+a promíchaly části skriptu. Došlo k otevření značky <script> uprostřed
+stávajícího skriptu, k vícenásobnému definování funkce
+exportDailyDetailedToExcel a k duplicitnímu uzavření značek
+</script></body></html>. Tyto syntaktické chyby způsobily nefunkčnost celého
+souboru.
+
+Zde je kompletní, opravený a vyčištěný kód souboru index.html.
+
+Byla ponechána pokročilejší verze exportu (exportDailyDetailedToExcel), která
+správně páruje data o plánovaných svozech s reálnými nakládkami řidičů a na
+konec souboru přidává i denní rozpis návěsů pro vybraný den. Do skriptu byly
+rovněž doplněny chybějící funkce pro zálohování nastavení (exportData a
+importData), na které odkazuje sekce Nastavení.
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -768,6 +783,64 @@
             renderModalContent();
         }
 
+        // --- ZÁLOHOVÁNÍ A PŘENOS DAT ---
+        function exportData() {
+            const backup = {
+                customersDelivery: JSON.parse(localStorage.getItem('customersDelivery')) || [],
+                customersPickup: JSON.parse(localStorage.getItem('customersPickup')) || [],
+                drivers: JSON.parse(localStorage.getItem('drivers')) || [],
+                internalDrivers: JSON.parse(localStorage.getItem('internalDrivers')) || [],
+                dailyTargets: localDailyTargets,
+                pickups: localPickups,
+                trailerPlans: localTrailerPlans
+            };
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `geis_backup_${getTodayStr()}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.customersDelivery) db.collection("settings").doc("customersDelivery").set({ list: data.customersDelivery });
+                    if (data.customersPickup) db.collection("settings").doc("customersPickup").set({ list: data.customersPickup });
+                    if (data.drivers) db.collection("settings").doc("drivers").set({ list: data.drivers });
+                    if (data.internalDrivers) db.collection("settings").doc("internalDrivers").set({ list: data.internalDrivers });
+                    
+                    if (data.dailyTargets && Array.isArray(data.dailyTargets)) {
+                        data.dailyTargets.forEach(t => {
+                            const { docId, ...rest } = t;
+                            db.collection("dailyTargets").doc(t.id || docId).set(rest);
+                        });
+                    }
+                    if (data.pickups && Array.isArray(data.pickups)) {
+                        data.pickups.forEach(p => {
+                            const { docId, ...rest } = p;
+                            db.collection("pickups").doc(p.id || docId).set(rest);
+                        });
+                    }
+                    if (data.trailerPlans && Array.isArray(data.trailerPlans)) {
+                        data.trailerPlans.forEach(tp => {
+                            const { docId, ...rest } = tp;
+                            db.collection("trailerPlans").doc(tp.id || docId).set(rest);
+                        });
+                    }
+                    alert("Data byla úspěšně importována do databáze.");
+                } catch (err) {
+                    alert("Chyba při čtení souboru: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
         function closeDetails() {
             currentTargetId = null;
             document.getElementById('detailsModal').classList.remove('flex');
@@ -1530,7 +1603,8 @@
             }
 
             // CSV hlavička a formátování kompatibilní s Excelem
-            let csvContent = "MĚŘENÍ ODBĚRU - DETAILNÍ DENNÍ SVOD: " + formatDateToCzech(activeDate) + "\n\n";
+            let csvContent = "\ufeff";
+            csvContent += "MĚŘENÍ ODBĚRU - DETAILNÍ DENNÍ SVOD: " + formatDateToCzech(activeDate) + "\n\n";
             csvContent += "Zákazník;Plán FP;Plán KH;Plán PK;Řidič (nakládka);Odvezeno FP;Odvezeno KH;Odvezeno PK;Čas zápisu\n";
 
             targets.forEach(t => {
@@ -1648,73 +1722,6 @@
         // Pevná a správná inicializace kalendáře i záložky při spuštění (vyřeší chybějící datum)
         updateDateUI();
         switchTab('counter');
-    function exportDailyDetailedToExcel() {
-            const data = localDailyTargets; 
-            if (!data || data.length === 0) {
-                alert("Žádná data k exportu.");
-                return;
-            }
-            const formatValue = (val) => (val === 0 || val === '0' || val === null || val === undefined ? '' : val);
-            let csvContent = "\ufeff"; 
-            csvContent += "Datum;Zákazník;Řidič;FP;KH;PK\n";
-            data.forEach(item => {
-                let row = `${formatValue(item.date)};${formatValue(item.customer)};${formatValue(item.driver)};${formatValue(item.fp)};${formatValue(item.kh)};${formatValue(item.pk)}`;
-                csvContent += row + "\n";
-            });
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `svozy_export_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-<script>
-        // TADY MÁTE SVÉ STÁVAJÍCÍ FUNKCE (např. firebaseConfig, atd.)
-        
-        // ...
-
-        // SEM VLOŽTE TU NOVOU FUNKCI:
-        function exportDailyDetailedToExcel() {
-            const data = localDailyTargets; 
-            
-            if (!data || data.length === 0) {
-                alert("Žádná data k exportu.");
-                return;
-            }
-
-            let csvContent = "\ufeff"; 
-            csvContent += "Datum;Zákazník;Řidič;FP;KH;PK\n";
-            
-            data.forEach(item => {
-                const row = [
-                    item.date || '',
-                    item.customer || '',
-                    item.driver || '',
-                    item.fp || '',
-                    item.kh || '',
-                    item.pk || ''
-                ].join(';');
-                
-                csvContent += row + "\n";
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `svozy_export_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-    </script>
-</body>
-</html>
-
-        
     </script>
 </body>
 </html>
