@@ -1,17 +1,3 @@
-Zde je kompletní kód vašeho souboru index.html. Do tohoto kódu byly integrovány
-všechny požadované úpravy:
-
-1.  Detailní export dne (exportDailyDetailedToExcel): Funkce byla korektně
-    zařazena do sekce <script>. Pracuje se synchronizovanými daty přímo z polí
-    localDailyTargets, localPickups a localTrailerPlans pro zvolené datum
-    (activeDate).
-2.  Přidání chybějících funkcí zálohování (exportData a importData): Tyto funkce
-    v nastavení dříve chyběly a způsobovaly by po kliknutí chybu v konzoli. Nyní
-    jsou plně funkční a umožňují stáhnout kompletní zálohu databáze ve formátu
-    JSON a opět ji nahrát.
-3.  Zachování designu: Původní rozvržení prvků, styly tmavého režimu i struktury
-    databázových tabulek zůstaly netknuté.
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -1234,64 +1220,6 @@ všechny požadované úpravy:
             modal.classList.add('flex');
         }
 
-        // --- FUNKCE ZÁLOHOVÁNÍ A PŘENOSU DAT ---
-        function exportData() {
-            const backup = {
-                customersDelivery: JSON.parse(localStorage.getItem('customersDelivery')) || [],
-                customersPickup: JSON.parse(localStorage.getItem('customersPickup')) || [],
-                drivers: JSON.parse(localStorage.getItem('drivers')) || [],
-                internalDrivers: JSON.parse(localStorage.getItem('internalDrivers')) || [],
-                dailyTargets: localDailyTargets,
-                pickups: localPickups,
-                trailerPlans: localTrailerPlans
-            };
-            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `geis_backup_${getTodayStr()}.json`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (data.customersDelivery) db.collection("settings").doc("customersDelivery").set({ list: data.customersDelivery });
-                    if (data.customersPickup) db.collection("settings").doc("customersPickup").set({ list: data.customersPickup });
-                    if (data.drivers) db.collection("settings").doc("drivers").set({ list: data.drivers });
-                    if (data.internalDrivers) db.collection("settings").doc("internalDrivers").set({ list: data.internalDrivers });
-                    
-                    if (data.dailyTargets && Array.isArray(data.dailyTargets)) {
-                        data.dailyTargets.forEach(t => {
-                            const { docId, ...rest } = t;
-                            db.collection("dailyTargets").doc(t.id || docId).set(rest);
-                        });
-                    }
-                    if (data.pickups && Array.isArray(data.pickups)) {
-                        data.pickups.forEach(p => {
-                            const { docId, ...rest } = p;
-                            db.collection("pickups").doc(p.id || docId).set(rest);
-                        });
-                    }
-                    if (data.trailerPlans && Array.isArray(data.trailerPlans)) {
-                        data.trailerPlans.forEach(tp => {
-                            const { docId, ...rest } = tp;
-                            db.collection("trailerPlans").doc(tp.id || docId).set(rest);
-                        });
-                    }
-                    alert("Data byla úspěšně importována do databáze.");
-                } catch (err) {
-                    alert("Chyba při čtení souboru: " + err.message);
-                }
-            };
-            reader.readAsText(file);
-        }
-
         function cancelTrailerEdit() {
             closeTrailerModal();
         }
@@ -1720,6 +1648,29 @@ všechny požadované úpravy:
         // Pevná a správná inicializace kalendáře i záložky při spuštění (vyřeší chybějící datum)
         updateDateUI();
         switchTab('counter');
+    function exportDailyDetailedToExcel() {
+            const data = localDailyTargets; 
+            if (!data || data.length === 0) {
+                alert("Žádná data k exportu.");
+                return;
+            }
+            const formatValue = (val) => (val === 0 || val === '0' || val === null || val === undefined ? '' : val);
+            let csvContent = "\ufeff"; 
+            csvContent += "Datum;Zákazník;Řidič;FP;KH;PK\n";
+            data.forEach(item => {
+                let row = `${formatValue(item.date)};${formatValue(item.customer)};${formatValue(item.driver)};${formatValue(item.fp)};${formatValue(item.kh)};${formatValue(item.pk)}`;
+                csvContent += row + "\n";
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `svozy_export_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    
     </script>
 </body>
 </html>
