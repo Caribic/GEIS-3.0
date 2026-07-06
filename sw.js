@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sw-v20';
+const CACHE_NAME = 'sw-v21';
 
 // Relativní cesty zajišťují kompatibilitu na jakékoliv doméně/složce na GitHubu
 const urlsToCache = [
