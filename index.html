@@ -95,7 +95,6 @@
                 <div class="leading-tight min-w-0">
                     <div class="flex items-center gap-2">
                         <h1 class="text-xs font-black tracking-tight text-[#003366] uppercase">Geis Svozy</h1>
-                        <!-- Tlačítko přepínání tmavého vzhledu -->
                         <button onclick="toggleDarkMode()" class="text-gray-500 hover:text-[#003366] focus:outline-none" title="Přepnout tmavý/světlý režim">
                             <svg id="themeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
@@ -204,8 +203,8 @@
         </div>
     </main>
 
-    <!-- Modální okno nakládky řidiče -->
-    <div id="detailsModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+    <!-- Modální okno nakládky řidiče (OPRAVENO: Formulář nakládky je nahoře u zelené čáry, stav palet až pod ním) -->
+    <div id="detailsModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-2 sm:items-center sm:pt-0 justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -216,6 +215,10 @@
             </div>
             
             <div class="p-4 space-y-4 overflow-y-auto flex-1">
+                <!-- 1. Formulář pro zápis nakládky (Nyní nahoře na úrovni zelené čáry) -->
+                <div id="modalFormContainer"></div>
+
+                <!-- 2. Stav zbývajících palet k odvozu (Přesunuto pod formulář) -->
                 <div class="grid grid-cols-3 gap-1.5">
                     <div id="modalFPBox" class="text-center p-2 rounded-xl border">
                         <span id="modalFPLabel" class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider">FP</span>
@@ -231,8 +234,7 @@
                     </div>
                 </div>
 
-                <div id="modalFormContainer"></div>
-
+                <!-- 3. Historie nakládek -->
                 <div class="space-y-2">
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Historie nakládek vozidel:</p>
                     <div id="modalHistoryContainer" class="space-y-1.5 max-h-48 overflow-y-auto pr-1"></div>
@@ -247,8 +249,8 @@
         </div>
     </div>
 
-    <!-- Modální okno plánování návěsu (S OPRAVENÝMExplicitním nastavením barev textu v inputech) -->
-    <div id="trailerPlanModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+    <!-- Modální okno plánování návěsu -->
+    <div id="trailerPlanModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-2 sm:items-center sm:pt-0 justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200 dark:border-slate-750">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -260,14 +262,13 @@
             
             <div class="p-4 space-y-4 overflow-y-auto flex-1">
                 <div class="space-y-3">
-                    <!-- Výběr řidiče -->
+                    <!-- Výběr řidiče (Unified Evidence) -->
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Interní řidič</label>
                         <div class="flex gap-2 mt-1">
                             <select id="trailerDriverSelect" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
                                 <option value="" disabled selected>Vyberte řidiče...</option>
                             </select>
-                            <button onclick="quickAddInternalDriver()" class="bg-[#003366] text-white font-bold px-3 rounded-lg h-10 hover:bg-black transition-colors" title="Rychle přidat interního řidiče">+</button>
                         </div>
                     </div>
 
@@ -315,7 +316,7 @@
     </div>
 
     <!-- Modální okno detailu Karty řidiče -->
-    <div id="driverCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+    <div id="driverCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-2 sm:items-center sm:pt-0 justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl flex flex-col border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -332,7 +333,7 @@
     </div>
 
     <!-- Modální okno detailu Karty zákazníka -->
-    <div id="customerCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+    <div id="customerCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-2 sm:items-center sm:pt-0 justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl flex flex-col border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -366,13 +367,13 @@
         <div id="statsContent" class="space-y-4"></div>
     </main>
 
-    <!-- Nastavení (sbalitelné akordeony a karty řidičů s dynamickými dropdowny) -->
+    <!-- Nastavení (OPRAVENO: Texty dle snímku, odstraněna sekce 'Řidiči (Návěsy 33 EUR)') -->
     <main id="tab-settings" class="hidden-tab p-4 space-y-3">
         
-        <!-- Karty zákazníků s adresou a kontakty -->
+        <!-- KARTA ZÁKAZNÍKA -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group" id="details-customer-cards" open>
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
-                <span class="flex items-center gap-1.5">🏢 Karty zákazníků (Kontakty & Adresy)</span>
+                <span class="flex items-center gap-1.5">🏢 KARTA ZÁKAZNÍKA</span>
                 <span class="transition-transform group-open:rotate-180 text-gray-400">▼</span>
             </summary>
             <div class="p-4 space-y-4">
@@ -418,10 +419,10 @@
             </div>
         </details>
 
-        <!-- KARTY ŘIDIČŮ S DYNAMICKÝMI DROPDOWNY -->
+        <!-- KARTA ŘIDIČE -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group" id="details-driver-cards">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
-                <span class="flex items-center gap-1.5">📇 Karty řidičů (Detaily & Volání)</span>
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+                <span class="flex items-center gap-1.5">📇 KARTA ŘIDIČE</span>
                 <span class="transition-transform group-open:rotate-180 text-gray-400">▼</span>
             </summary>
             <div class="p-4 space-y-4">
@@ -482,10 +483,10 @@
             </div>
         </details>
 
-        <!-- SBALITELNÉ SEZNAMY DOPRAVCŮ A VOZIDEL PRO ADMINISTRACI -->
+        <!-- DOPRAVCI -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
-                <span>Číselník Dopravců</span>
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+                <span>DOPRAVCI</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
@@ -497,9 +498,10 @@
             </div>
         </details>
 
+        <!-- VOZIDLA -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
-                <span>Číselník Typů Vozidel</span>
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+                <span>VOZIDLA</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
@@ -511,10 +513,10 @@
             </div>
         </details>
 
-        <!-- Sbalitelní Rozvozoví zákazníci -->
+        <!-- ZÁKAZNÍCI - ROZVOZ -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
-                <span>Rozvozoví Zákazníci (Návěsy)</span>
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+                <span>ZÁKAZNÍCI - ROZVOZ</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
@@ -526,10 +528,10 @@
             </div>
         </details>
 
-        <!-- Sbalitelní Svozoví zákazníci -->
+        <!-- ZÁKAZNÍCI - SVOZ -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
-                <span>Svozoví Zákazníci (Mřížka & Návěsy)</span>
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+                <span>ZÁKAZNÍCI - SVOZ</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
@@ -541,25 +543,10 @@
             </div>
         </details>
 
-        <!-- Sbalitelní Řidiči (Návěsy) -->
+        <!-- EVIDENCE ŘIDIČŮ (OPRAVENO: Jednotná správa, smazán starý duplicitní akordeon) -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
-                <span>Řidiči (Návěsy 33 EUR)</span>
-                <span class="transition-transform group-open:rotate-180">▼</span>
-            </summary>
-            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
-                <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newInternalDriverName" placeholder="Jméno řidiče" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-slate-800 dark:text-white">
-                    <button onclick="addItem('internalDrivers', 'newInternalDriverName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
-                </div>
-                <div id="settingsInternalDriversList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
-            </div>
-        </details>
-
-        <!-- Sbalitelní Smluvní řidiči -->
-        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-gray-400 uppercase tracking-wider select-none list-none hover:bg-slate-50/50">
-                <span>Smluvní řidiči (Běžný svoz)</span>
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+                <span>EVIDENCE ŘIDIČŮ</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
@@ -626,7 +613,6 @@
 
         const defaultCustomers = ["WIMEX","ALBI","DRANA","V-GARDEN","GARLAND","HP TRONIC","SHIPMALL","KRPA","TAMADEX","Z-TRADE","HOBRA ŠKOLNÍK","PENTA","FOMEI","SKOLIL KOMPOZIT","VETRO-PLUS","HR.PEKÁRNA","VOR","ITADECO","MEKR´S","SECO","COROLL","DETECHA","NUTRICIUS","KOMAP","ELPRIM","FANTON","TCM POINT","HORNBACH"];
         const defaultDrivers = ["KINDA","DVOŘÁK","PUTERKA","VRABEC","DOLEŽAL","KŘÍŽ","DUŽDA","VAŇÁTKO","DAVID","BAŽANT","KLEIN","PARTEL","SVYATYLO","HAVEL","KOCOUREK","DRAPÁK","RICHTER","BÁRTA"];
-        const defaultInternalDrivers = ["BAŽANT", "KLEIN", "ŠPIČKA", "DOLEŽAL", "TĚŠÍNSKÝ", "VRABEC", "VAŇÁTKO"];
 
         const defaultCarriers = [
             "AUTODOPRAVA ŽÍDEK", "ŠTĚPÁN STIX", "LIBOR RYND", "GEIS CZ", 
@@ -701,6 +687,12 @@
             }
         }
 
+        // Separální bezpečné otevírání detailu zákazníka (OPRAVENO: event.stopPropagation pro mobilní mřížku)
+        function openCustomerCardFromTile(event, customerName) {
+            event.stopPropagation();
+            showCustomerCard(customerName);
+        }
+
         // Automatické přidání z rozbalovací nabídky
         function autoAddDraftCustomer(type, selectEl) {
             const customer = selectEl.value;
@@ -761,13 +753,12 @@
             return [...array].sort((a, b) => a.localeCompare(b, 'cs'));
         }
 
-        // FIREBASE INITIAL REALTIME SYNC
+        // FIREBASE INITIAL REALTIME SYNC (OPRAVENO: Odstraněn duplicitní internalDrivers)
         db.collection("settings").get().then((snapshot) => {
             if (snapshot.empty) {
                 db.collection("settings").doc("customersDelivery").set({ list: defaultCustomers });
                 db.collection("settings").doc("customersPickup").set({ list: defaultCustomers });
                 db.collection("settings").doc("drivers").set({ list: defaultDrivers });
-                db.collection("settings").doc("internalDrivers").set({ list: defaultInternalDrivers });
                 db.collection("settings").doc("carriers").set({ list: defaultCarriers });
                 db.collection("settings").doc("vehicles").set({ list: defaultVehicles });
             } else {
@@ -826,7 +817,6 @@
             renderDriverCardsList();
         });
 
-        // SYNCHRONIZACE KARET ZÁKAZNÍKŮ S FIREBASE
         db.collection("customerCards").onSnapshot((snapshot) => {
             localCustomerCards = [];
             snapshot.forEach((doc) => {
@@ -839,7 +829,7 @@
         function populateAllDropdowns() {
             const custPickup = sortAlphabetically(JSON.parse(localStorage.getItem('customersPickup')) || []);
             const custDelivery = sortAlphabetically(JSON.parse(localStorage.getItem('customersDelivery')) || []);
-            const internalDrivers = sortAlphabetically(JSON.parse(localStorage.getItem('internalDrivers')) || []);
+            const drivers = sortAlphabetically(JSON.parse(localStorage.getItem('drivers')) || []);
             const carriers = sortAlphabetically(JSON.parse(localStorage.getItem('carriers')) || []);
             const vehicles = sortAlphabetically(JSON.parse(localStorage.getItem('vehicles')) || []);
 
@@ -852,10 +842,11 @@
                     availablePickupCustomers.map(c => `<option value="${c}">${c}</option>`).join('');
             }
 
+            // Sjednoceno: Návěsy nyní čerpají ze sjednocené evidence řidičů
             const trailerDriverSelect = document.getElementById('trailerDriverSelect');
             if (trailerDriverSelect) {
                 trailerDriverSelect.innerHTML = '<option value="" disabled selected>Vyberte řidiče...</option>' +
-                    internalDrivers.map(d => `<option value="${d}">${d}</option>`).join('');
+                    drivers.map(d => `<option value="${d}">${d}</option>`).join('');
             }
 
             const trailerDeliverySelect = document.getElementById('trailerDeliverySelect');
@@ -883,7 +874,6 @@
             }
         }
 
-        // Globální vyhledávací systém
         function performGlobalDriverSearch(query) {
             const resultsContainer = document.getElementById('globalSearchResults');
             if (!resultsContainer) return;
@@ -968,8 +958,8 @@
         function clearGlobalSearch() {
             const searchInput = document.getElementById('globalDriverSearch');
             if (searchInput) searchInput.value = '';
-            const resultsContainer = document.getElementById('globalSearchResults');
-            if (resultsContainer) resultsContainer.classList.add('hidden');
+            const SandyResults = document.getElementById('globalSearchResults');
+            if (SandyResults) SandyResults.classList.add('hidden');
         }
 
         function quickAddCustomer(type) {
@@ -988,23 +978,6 @@
             list.sort();
             
             db.collection("settings").doc(key).set({ list: list }).catch(e => alert("Chyba při uložení: " + e.message));
-        }
-
-        function quickAddInternalDriver() {
-            const name = prompt("Zadejte jméno nového firemního řidiče:");
-            if (!name) return;
-            const formattedName = name.trim().toUpperCase();
-            if (!formattedName) return;
-
-            let list = JSON.parse(localStorage.getItem('internalDrivers')) || [];
-            if (list.includes(formattedName)) {
-                alert("Tento řidič již v seznamu existuje.");
-                return;
-            }
-            list.push(formattedName);
-            list.sort();
-            
-            db.collection("settings").doc("internalDrivers").set({ list: list }).catch(e => alert("Chyba při uložení: " + e.message));
         }
 
         function createDailyTarget() {
@@ -1136,10 +1109,9 @@
             const remainingPK = Math.max(0, diffPK);
             const isDone = diffFP <= 0 && diffKH <= 0 && diffPK <= 0;
 
-            // Název zákazníka v záhlaví modálu je proklikávací na jeho Kartu
             document.getElementById('modalCustomerName').innerHTML = `
                 <div class="flex items-center gap-3">
-                    <span class="hover:underline cursor-pointer" onclick="event.stopPropagation(); showCustomerCard('${t.customer}')">🏢 ${t.customer}</span>
+                    <span class="hover:underline cursor-pointer" onclick="openCustomerCardFromTile(event, '${t.customer}')">🏢 ${t.customer}</span>
                     <button onclick="editTarget('${t.id}')" class="text-slate-300 hover:text-[#003366] p-1.5 rounded-lg hover:bg-[#002244] transition-colors" title="Upravit dnešní plán">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
@@ -1150,7 +1122,6 @@
             
             document.getElementById('modalTargetInfo').textContent = `Plán svozu: FP: ${t.targetFP} | KH: ${t.targetKH} | PK: ${t.targetPK || 0}`;
 
-            // FP Box
             if (diffFP < 0) {
                 document.getElementById('modalRemainingFP').textContent = Math.abs(diffFP);
                 document.getElementById('modalFPBox').className = "text-center p-2 rounded-xl bg-orange-50 text-orange-700 border border-orange-300";
@@ -1159,7 +1130,6 @@
                 document.getElementById('modalFPBox').className = remainingFP > 0 ? "text-center p-2 rounded-xl bg-gray-50 text-slate-800 border-l-4 border-l-[#003366] border-gray-200" : "text-center p-2 rounded-xl bg-gray-100 text-gray-400 border border-gray-200";
             }
 
-            // KH Box
             if (diffKH < 0) {
                 document.getElementById('modalRemainingKH').textContent = Math.abs(diffKH);
                 document.getElementById('modalKHBox').className = "text-center p-2 rounded-xl bg-orange-50 text-orange-700 border border-orange-300";
@@ -1168,7 +1138,6 @@
                 document.getElementById('modalKHBox').className = remainingKH > 0 ? "text-center p-2 rounded-xl bg-gray-50 text-slate-800 border-l-4 border-l-[#003366] border-gray-200" : "text-center p-2 rounded-xl bg-gray-100 text-gray-400 border border-gray-200";
             }
 
-            // PK Box
             const modalPKBox = document.getElementById('modalPKBox');
             if (modalPKBox) {
                 if (diffPK < 0) {
@@ -1190,13 +1159,13 @@
                     let driverOptions = availableDrivers.map(d => `<option value="${d}">${d}</option>`).join('');
                     
                     const isEditing = (editingPickupId !== null);
-                    const btnLabel = isEditing ? 'Uložit změny nakládky' : 'Potvrdit naložení a odečíst';
+                    const btnLabel = isEditing ? 'Uložit změny nakládky' : 'POTVRDIT NALOŽENÍ A ODEČÍST';
                     const btnColor = isEditing ? 'bg-amber-600 hover:bg-amber-700' : 'bg-[#003366] hover:bg-slate-900';
 
                     formContainer.innerHTML = `
                         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-inner space-y-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-[10px] font-black text-[#003366] uppercase tracking-wider">${isEditing ? 'Upravit zadanou nakládku' : 'Zapsat nakládku řidiče'}</span>
+                                <span class="text-[10px] font-black text-[#003366] uppercase tracking-wider">${isEditing ? 'Upravit zadanou nakládku' : 'ZAPSAT NAKLÁDKU ŘIDIČE'}</span>
                                 <select id="modalDriverSelect" class="bg-white border border-gray-300 rounded-lg px-2.5 py-1 text-xs font-bold text-slate-700 outline-none shadow-sm focus:border-[#003366] w-36 text-slate-800">
                                     ${driverOptions}
                                 </select>
@@ -1259,7 +1228,7 @@
                     <div class="flex items-center gap-2">
                         ${phoneButton}
                         <button onclick="editPickup('${p.id}')" class="text-xs text-amber-600 hover:underline font-bold px-1">upravit</button>
-                        <button onclick="deletePickup('${p.id}')" class="text-[#e30613] hover:text-red-800 font-bold px-1 text-sm" title="Stornovat nakládku">✕</button>
+                        <button onclick="deletePickup('${p.id}')" class="text-[#e30613] hover:text-red-700 font-bold px-1 text-sm" title="Stornovat nakládku">✕</button>
                     </div>
                 </div>`;
             });
@@ -1393,7 +1362,8 @@
                     tileHtml = `
                     <div class="bg-[#ecfdf5] dark:bg-emerald-950/40 border-l-[3px] border-[#96c11f] border-y border-r border-gray-200 dark:border-slate-700 rounded-lg p-2 shadow-sm active:scale-95 transition-all cursor-pointer flex flex-col justify-between h-[72px]" onclick="openDetails('${t.id}')">
                         <div class="font-bold text-emerald-800 dark:text-emerald-300 text-xs truncate flex justify-between items-center">
-                            <span class="hover:underline cursor-pointer" onclick="event.stopPropagation(); showCustomerCard('${t.customer}')">🏢 ${t.customer}</span>
+                            <!-- OPRAVENO: Karta zákazníka se otevírá striktně při kliku na jeho název -->
+                            <span class="hover:underline cursor-pointer" onclick="openCustomerCardFromTile(event, '${t.customer}')">🏢 ${t.customer}</span>
                             <span class="text-[10px] text-[#96c11f]">✓</span>
                         </div>
                         <div class="text-[9px] font-black text-center text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/50 py-0.5 rounded uppercase tracking-wider leading-none mt-auto">
@@ -1403,7 +1373,8 @@
                 } else {
                     tileHtml = `
                     <div onclick="openDetails('${t.id}')" class="bg-white border-l-[3px] border-[#003366] border-y border-r border-gray-200 rounded-lg p-2 shadow-sm hover:border-[#003366] active:scale-95 transition-all cursor-pointer flex flex-col justify-between h-[72px]">
-                        <div class="font-bold text-slate-800 text-xs truncate hover:underline cursor-pointer" onclick="event.stopPropagation(); showCustomerCard('${t.customer}')" title="${t.customer}">🏢 ${t.customer}</div>
+                        <!-- OPRAVENO: Karta zákazníka se otevírá striktně při kliku na jeho název -->
+                        <div class="font-bold text-slate-800 text-xs truncate hover:underline cursor-pointer" onclick="openCustomerCardFromTile(event, '${t.customer}')" title="${t.customer}">🏢 ${t.customer}</div>
                         
                         <div class="flex items-center justify-between text-[9px] text-gray-500 font-bold mt-1 gap-1">
                             <span class="bg-slate-100 text-slate-800 px-1 py-0.5 rounded truncate">
@@ -1572,7 +1543,7 @@
                         <span class="text-[8px] font-black text-blue-400 uppercase tracking-widest block mb-0.5">ROZVOZ</span>
                         <div class="flex flex-wrap gap-1">
                             ${p.deliveries && p.deliveries.length > 0 
-                                ? p.deliveries.map(d => `<span class="bg-blue-900/60 text-blue-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-blue-800 cursor-pointer hover:underline truncate max-w-[80px]" onclick="event.stopPropagation(); showCustomerCard('${d}')" title="${d}">${d}</span>`).join('')
+                                ? p.deliveries.map(d => `<span class="bg-blue-900/60 text-blue-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-blue-800 cursor-pointer hover:underline truncate max-w-[80px]" onclick="openCustomerCardFromTile(event, '${d}')" title="${d}">${d}</span>`).join('')
                                 : '<span class="text-[9px] text-slate-500 italic">--</span>'
                             }
                         </div>
@@ -1582,7 +1553,7 @@
                         <span class="text-[8px] font-black text-emerald-600 uppercase tracking-widest block mb-0.5">SVOZ</span>
                         <div class="flex flex-wrap gap-1">
                             ${p.pickups && p.pickups.length > 0 
-                                ? p.pickups.map(s => `<span class="bg-green-900/60 text-emerald-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-green-800 cursor-pointer hover:underline truncate max-w-[80px]" onclick="event.stopPropagation(); showCustomerCard('${s}')" title="${s}">${s}</span>`).join('')
+                                ? p.pickups.map(s => `<span class="bg-green-900/60 text-emerald-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-green-800 cursor-pointer hover:underline truncate max-w-[80px]" onclick="openCustomerCardFromTile(event, '${s}')" title="${s}">${s}</span>`).join('')
                                 : '<span class="text-[9px] text-slate-500 italic">--</span>'
                             }
                         </div>
@@ -1622,7 +1593,6 @@
 
             const pickups = localPickups;
             const targets = localDailyTargets;
-            const internalDrivers = JSON.parse(localStorage.getItem('internalDrivers')) || [];
             
             const now = new Date();
             const nowCopy = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -1644,7 +1614,11 @@
             let otherPickups = [];
 
             filteredPickups.forEach(p => {
-                if (internalDrivers.includes(p.driver)) trailerPickups.push(p);
+                const targetObj = targets.find(t => t.id === p.targetId);
+                const pDate = targetObj ? targetObj.date : null;
+                const isTrailer = localTrailerPlans.some(tp => tp.driver === p.driver && tp.date === pDate);
+                
+                if (isTrailer) trailerPickups.push(p);
                 else otherPickups.push(p);
             });
 
@@ -1842,7 +1816,6 @@
             const custDelivery = sortAlphabetically(JSON.parse(localStorage.getItem('customersDelivery')) || []);
             const custPickup = sortAlphabetically(JSON.parse(localStorage.getItem('customersPickup')) || []);
             const drvs = sortAlphabetically(JSON.parse(localStorage.getItem('drivers')) || []);
-            const internalDrivers = sortAlphabetically(JSON.parse(localStorage.getItem('internalDrivers')) || []);
             const carriers = sortAlphabetically(JSON.parse(localStorage.getItem('carriers')) || []);
             const vehicles = sortAlphabetically(JSON.parse(localStorage.getItem('vehicles')) || []);
             
@@ -1858,7 +1831,6 @@
             document.getElementById('settingsCustomersDeliveryList').innerHTML = buildList(custDelivery, 'customersDelivery');
             document.getElementById('settingsCustomersPickupList').innerHTML = buildList(custPickup, 'customersPickup');
             document.getElementById('settingsDriversList').innerHTML = buildList(drvs, 'drivers');
-            document.getElementById('settingsInternalDriversList').innerHTML = buildList(internalDrivers, 'internalDrivers');
             
             document.getElementById('settingsCarriersList').innerHTML = buildList(carriers, 'carriers');
             document.getElementById('settingsVehiclesList').innerHTML = buildList(vehicles, 'vehicles');
@@ -2057,12 +2029,22 @@
 
             if (card) {
                 const cleanPhone = card.phone ? card.phone.replace(/\s+/g, '') : '';
+                
+                // Telefonní volání
                 const phoneButton = cleanPhone 
                     ? `<a href="tel:${cleanPhone}" class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition-colors shadow-sm font-sans tracking-wide">
                          📞 Zavolat řidiči (${card.phone})
                        </a>`
                     : `<div class="text-center text-xs text-gray-400 italic bg-gray-50 p-3 rounded-xl border">Telefonní číslo nebylo zadáno</div>`;
 
+                // OPRAVENO: Odeslání SMS
+                const smsButton = cleanPhone
+                    ? `<a href="sms:${cleanPhone}" class="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition-colors shadow-sm font-sans tracking-wide mt-2">
+                         💬 Odeslat SMS řidiči
+                       </a>`
+                    : '';
+
+                // OPRAVENO: Záměna dlaždic (Vozidlo nahoře, Dopravce dole)
                 body.innerHTML = `
                     <div class="space-y-4">
                         <div class="grid grid-cols-2 gap-3 text-xs">
@@ -2071,18 +2053,19 @@
                                 <span class="font-black text-slate-800 dark:text-slate-200 text-sm">${card.spz || 'NENÍ ZADÁNA'}</span>
                             </div>
                             <div class="bg-gray-50 dark:bg-slate-900 p-3 rounded-xl border border-gray-100 dark:border-slate-800">
-                                <span class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider mb-0.5">DOPRAVCE</span>
-                                <span class="font-black text-slate-800 dark:text-slate-200 text-sm truncate block" title="${card.carrier || '-'}">${card.carrier || 'NEUVEDEN'}</span>
+                                <span class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider mb-0.5">VELIKOST / TYP VOZIDLA</span>
+                                <span class="font-black text-slate-800 dark:text-slate-200 text-sm truncate block" title="${card.vehicleSize || '-'}">${card.vehicleSize || 'NEUVEDENA'}</span>
                             </div>
                         </div>
                         
                         <div class="bg-gray-50 dark:bg-slate-900 p-3 rounded-xl border border-gray-100 dark:border-slate-800 text-xs">
-                            <span class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider mb-0.5">VELIKOST / TYP VOZIDLA</span>
-                            <span class="font-black text-slate-800 dark:text-slate-200 text-sm">${card.vehicleSize || 'NEUVEDENA'}</span>
+                            <span class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider mb-0.5">DOPRAVCE</span>
+                            <span class="font-black text-slate-800 dark:text-slate-200 text-sm">${card.carrier || 'NEUVEDEN'}</span>
                         </div>
 
                         <div class="pt-1">
                             ${phoneButton}
+                            ${smsButton}
                         </div>
                         
                         <div class="pt-3 border-t border-gray-100 dark:border-slate-700 flex justify-between items-center text-xs">
