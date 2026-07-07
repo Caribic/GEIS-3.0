@@ -202,7 +202,7 @@
     </main>
 
     <!-- Modální okno nakládky řidiče -->
-    <div id="detailsModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+    <div id="detailsModal" class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -245,7 +245,7 @@
     </div>
 
     <!-- Modální okno pro Nový / Editovaný Plán návěsu (Působí čistě jako detail svozu) -->
-    <div id="trailerPlanModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+    <div id="trailerPlanModal" class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -308,6 +308,23 @@
                         Zrušit
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVÉ SPECIÁLNÍ OKNO PRO RYCHLÝ NÁHLED KARTY ŘIDIČE ODKUDKOLIV Z APLIKACE -->
+    <div id="driverCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl flex flex-col border border-gray-200">
+            <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
+                <div>
+                    <h2 id="driverCardModalTitle" class="text-lg font-black leading-tight uppercase text-white">---</h2>
+                    <p class="text-xs text-slate-200 mt-0.5 font-medium">Karta řidiče</p>
+                </div>
+                <button onclick="closeDriverCardModal()" class="bg-[#002244] hover:bg-[#001530] text-white rounded-full p-1.5 text-xs font-bold w-7 h-7 flex items-center justify-center transition-colors">✕</button>
+            </div>
+            
+            <div class="p-5 space-y-4" id="driverCardModalBody">
+                <!-- Dynamický obsah karty načtený přes JavaScript -->
             </div>
         </div>
     </div>
@@ -543,14 +560,12 @@
         const defaultDrivers = ["KINDA","DVOŘÁK","PUTERKA","VRABEC","DOLEŽAL","KŘÍŽ","DUŽDA","VAŇÁTKO","DAVID","BAŽANT","KLEIN","PARTEL","SVYATYLO","HAVEL","KOCOUREK","DRAPÁK","RICHTER","BÁRTA"];
         const defaultInternalDrivers = ["BAŽANT", "KLEIN", "ŠPIČKA", "DOLEŽAL", "TĚŠÍNSKÝ", "VRABEC", "VAŇÁTKO"];
 
-        // VÝCHOZÍ STRUKTURA DOPRAVCŮ (PŘEVEDENA NA VELKÁ PÍSMA)
         const defaultCarriers = [
             "AUTODOPRAVA ŽÍDEK", "ŠTĚPÁN STIX", "LIBOR RYND", "GEIS CZ", 
             "DRAPÁK & SPOL.", "JIŘÍ HOVORKA", "TIR AUTOTRANSPORT", 
             "MICHAL KOCOUREK", "NĚMEČEK A SYN", "PUTERKA TRANSPORT", "JAROSLAV HUŠEK"
         ].map(item => item.toUpperCase());
 
-        // VÝCHOZÍ STRUKTURA VOZIDEL (PŘEVEDENA NA VELKÁ PÍSMA)
         const defaultVehicles = [
             "DODÁVKA 8 PAL.", "DODÁVKA 10 PAL.", "DODÁVKA 12 PAL.", 
             "SOLO 15 PAL.", "SOLO 18 PAL.", "NÁVĚS 33 PAL.", "JINÉ"
@@ -656,7 +671,6 @@
                 db.collection("settings").doc("carriers").set({ list: defaultCarriers });
                 db.collection("settings").doc("vehicles").set({ list: defaultVehicles });
             } else {
-                // Dodatečné založení číselníků, pokud v DB chybí
                 db.collection("settings").doc("carriers").get().then(doc => {
                     if (!doc.exists) db.collection("settings").doc("carriers").set({ list: defaultCarriers });
                 });
@@ -746,14 +760,12 @@
                     custPickup.map(c => `<option value="${c}">${c}</option>`).join('');
             }
 
-            // NAPLNĚNÍ DROPDOWNU PRO KARTU ŘIDIČE (DOPRAVCE)
             const driverCardCarrier = document.getElementById('driverCardCarrier');
             if (driverCardCarrier) {
                 driverCardCarrier.innerHTML = '<option value="" disabled selected>Vyberte dopravce...</option>' +
                     carriers.map(c => `<option value="${c}">${c}</option>`).join('');
             }
 
-            // NAPLNĚNÍ DROPDOWNU PRO KARTU ŘIDIČE (VOZIDLO)
             const driverCardSize = document.getElementById('driverCardSize');
             if (driverCardSize) {
                 driverCardSize.innerHTML = '<option value="" disabled selected>Vyberte velikost vozidla...</option>' +
@@ -792,14 +804,9 @@
                 return;
             }
 
-            // Hledání v plánech návěsů pro aktivní den
             const trailerPlans = localTrailerPlans.filter(p => p.date === activeDate && p.driver.includes(q));
-
-            // Hledání v reálně zadaných nakládkách u zákazníků pro aktivní den
             const todayTargetIds = localDailyTargets.filter(t => t.date === activeDate).map(t => t.id);
             const pickups = localPickups.filter(p => todayTargetIds.includes(p.targetId) && p.driver.includes(q));
-
-            // Hledání v kartách řidičů
             const matchedCards = localDriverCards.filter(c => c.name.toUpperCase().includes(q));
 
             if (trailerPlans.length === 0 && pickups.length === 0 && matchedCards.length === 0) {
@@ -823,16 +830,10 @@
                 <div>
                     <span class="text-[9px] font-bold text-amber-500 uppercase tracking-wider block mb-1">Dohledané Karty Řidičů</span>`;
                 matchedCards.forEach(c => {
-                    const cleanPhone = c.phone ? c.phone.replace(/\s+/g, '') : '';
-                    const phoneBtn = cleanPhone 
-                        ? `<a href="tel:${cleanPhone}" class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 font-bold px-2 py-1 rounded text-[11px] mt-1.5 hover:bg-emerald-100 transition-colors">📞 Zavolat (${c.phone})</a>`
-                        : `<span class="text-gray-400 text-[10px] italic block mt-1">Bez zadaného telefonu</span>`;
-
                     html += `
-                    <div class="text-xs border border-amber-200 p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 mb-1.5">
-                        <p class="font-bold text-slate-800 dark:text-slate-100">${c.name} ${c.spz ? `(${c.spz})` : ''}</p>
-                        <p class="text-[10px] text-gray-500 dark:text-gray-300 mt-0.5">Dopravce: <b>${c.carrier || '-'}</b> | Velikost: <b>${c.vehicleSize || '-'}</b></p>
-                        ${phoneBtn}
+                    <div class="text-xs border border-amber-200 p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 mb-1.5 cursor-pointer hover:bg-amber-100/50 transition-colors" onclick="showDriverCard('${c.name}')">
+                        <p class="font-bold text-[#003366] dark:text-blue-300 uppercase hover:underline">📇 ${c.name} ${c.spz ? `(${c.spz})` : ''}</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-300 mt-0.5">Dopravce: <b>${c.carrier || '-'}</b> | Vozidlo: <b>${c.vehicleSize || '-'}</b></p>
                     </div>`;
                 });
                 html += `</div>`;
@@ -845,7 +846,7 @@
                 trailerPlans.forEach(p => {
                     html += `
                     <div class="text-xs border border-gray-150 p-2 rounded-lg bg-slate-50 dark:bg-slate-700 mb-1">
-                        <p class="font-bold text-slate-800 dark:text-slate-100">${p.driver} ${p.spz && p.spz !== 'BEZ SPZ' ? `(${p.spz})` : ''}</p>
+                        <p class="font-bold text-[#003366] dark:text-blue-300 cursor-pointer hover:underline uppercase" onclick="showDriverCard('${p.driver}')">🚚 ${p.driver} ${p.spz && p.spz !== 'BEZ SPZ' ? `(${p.spz})` : ''}</p>
                         <p class="text-[10px] text-gray-500 dark:text-gray-300 mt-1">Rozvoz: ${p.deliveries.join(', ') || 'Bez rozvozu'}</p>
                         <p class="text-[10px] text-gray-500 dark:text-gray-300">Svoz: ${p.pickups.join(', ') || 'Bez svozu'}</p>
                     </div>`;
@@ -862,7 +863,7 @@
                     const custName = target ? target.customer : "Neznámý";
                     html += `
                     <div class="text-xs bg-slate-50 dark:bg-slate-700 p-1.5 rounded border border-gray-150 mb-1 flex justify-between dark:border-slate-600">
-                        <span class="font-bold text-slate-800 dark:text-slate-100">${p.driver} ➔ ${custName}</span>
+                        <span class="font-bold text-[#003366] dark:text-blue-300 cursor-pointer hover:underline uppercase" onclick="showDriverCard('${p.driver}')">${p.driver}</span>
                         <span class="text-gray-500 dark:text-gray-300 font-semibold">${p.fp} FP / ${p.kh} KH / ${p.pk || 0} PK</span>
                     </div>`;
                 });
@@ -1094,6 +1095,7 @@
             renderModalContent();
         }
 
+        // Vykreslení modálního detailu zákazníka (přidány aktivní prokliky na jméno řidiče)
         function renderModalContent() {
             if (!currentTargetId) return;
 
@@ -1222,14 +1224,17 @@
                 const driverCard = localDriverCards.find(c => c.name.toUpperCase() === p.driver.toUpperCase());
                 const cleanPhone = driverCard && driverCard.phone ? driverCard.phone.replace(/\s+/g, '') : '';
                 const phoneButton = cleanPhone 
-                    ? `<a href="tel:${cleanPhone}" class="w-7 h-7 flex items-center justify-center bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold rounded-full transition-colors" title="Zavolat řidiči ${p.driver}">📞</a>`
+                    ? `<a href="tel:${cleanPhone}" class="w-7 h-7 flex items-center justify-center bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold rounded-full transition-colors animate-pulse" title="Zavolat řidiči ${p.driver}">📞</a>`
                     : '';
 
+                // Jméno řidiče je nyní proklikávací odkaz (třída cursor-pointer hover:underline)
                 historyHtml += `
                 <div class="flex justify-between items-center text-xs bg-white p-2.5 rounded-lg border border-gray-200 shadow-sm">
                     <div class="flex flex-col">
-                        <span class="font-bold text-[#003366]">${p.driver}</span>
-                        <span class="text-[11px] text-gray-500 font-medium">Odvezl: <b>${p.fp} FP</b> | <b>${p.kh} KH</b> | <b>${p.pk || 0} PK</b></span>
+                        <span class="font-black text-[#003366] cursor-pointer hover:underline text-[13px] uppercase tracking-wide flex items-center gap-1.5" onclick="showDriverCard('${p.driver}')">
+                            👤 ${p.driver}
+                        </span>
+                        <span class="text-[11px] text-gray-500 font-medium mt-0.5">Odvezl: <b>${p.fp} FP</b> | <b>${p.kh} KH</b> | <b>${p.pk || 0} PK</b></span>
                     </div>
                     <div class="flex items-center gap-2">
                         ${phoneButton}
@@ -1535,11 +1540,12 @@
                 return;
             }
 
+            // Přidána aktivní prokliky na jména řidičů (třída cursor-pointer hover:underline)
             plansList.innerHTML = dayPlans.map(p => `
                 <div class="bg-[#1e293b] text-white rounded-lg p-2.5 flex items-center justify-between gap-3 text-xs shadow-sm hover:border-[#003366] transition-colors">
                     <div class="w-1/4 min-w-0 shrink-0">
                         <span class="text-[8px] font-bold text-slate-400 block tracking-wider truncate">${p.spz && p.spz !== 'BEZ SPZ' ? p.spz : 'BEZ SPZ'}</span>
-                        <h4 class="font-black text-slate-100 uppercase truncate leading-tight">${p.driver}</h4>
+                        <h4 class="font-black text-slate-100 uppercase truncate leading-tight cursor-pointer hover:underline" onclick="showDriverCard('${p.driver}')">👤 ${p.driver}</h4>
                     </div>
                     
                     <div class="flex-1 min-w-0">
@@ -1664,7 +1670,7 @@
                         html += `
                         <div class="flex justify-between py-1.5 text-xs border-b border-gray-100 last:border-none">
                             <span class="font-bold text-slate-800">${cust}</span>
-                            <span class="text-gray-500">Celkem: <b class="text-slate-800">${val.fp} FP</b> | <b class="text-slate-800">${val.kh} KH</b> | <b class="text-slate-800">${val.pk} PK</b></span>
+                            <span class="text-gray-500">Celkem: <b class="text-slate-800">${val.fp} ...</b></span>
                         </div>`;
                     });
                 } else {
@@ -1834,7 +1840,6 @@
             document.getElementById('settingsDriversList').innerHTML = buildList(drvs, 'drivers');
             document.getElementById('settingsInternalDriversList').innerHTML = buildList(internalDrivers, 'internalDrivers');
             
-            // Správa číselníku dopravců a typů vozidel v administraci
             document.getElementById('settingsCarriersList').innerHTML = buildList(carriers, 'carriers');
             document.getElementById('settingsVehiclesList').innerHTML = buildList(vehicles, 'vehicles');
             
@@ -1951,7 +1956,6 @@
             document.getElementById('driverCardSPZ').value = card.spz || '';
             document.getElementById('driverCardPhone').value = card.phone || '';
 
-            // Výběr hodnoty v rolovacích dropdown seznamech
             const carrierSel = document.getElementById('driverCardCarrier');
             if (carrierSel) {
                 const normCarrier = card.carrier ? card.carrier.toUpperCase() : '';
@@ -1993,10 +1997,10 @@
                     : '<span class="text-gray-400 text-[11px] italic">Bez tel. čísla</span>';
 
                 return `
-                <div class="bg-white border border-gray-200 rounded-lg p-3.5 shadow-sm space-y-2 text-xs dark:bg-slate-800 dark:border-slate-700">
-                    <div class="flex justify-between items-start border-b border-gray-100 dark:border-slate-700 pb-1.5">
+                <div class="bg-white border border-gray-200 rounded-lg p-2.5 shadow-sm space-y-1.5 text-xs dark:bg-slate-800 dark:border-slate-700">
+                    <div class="flex justify-between items-start">
                         <div>
-                            <span class="font-black text-slate-800 dark:text-slate-100 uppercase text-sm">${c.name}</span>
+                            <span class="font-black text-slate-800 dark:text-slate-100 uppercase">${c.name}</span>
                             ${c.spz ? `<span class="bg-gray-100 text-gray-600 font-bold px-1.5 py-0.5 rounded ml-2 text-[10px] dark:bg-slate-700 dark:text-slate-200">${c.spz}</span>` : ''}
                         </div>
                         <div class="flex items-center gap-2">
@@ -2004,16 +2008,122 @@
                             <button onclick="deleteDriverCard('${c.id}')" class="text-[#e30613] hover:text-red-700 font-bold text-sm">✕</button>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-1.5 text-[11px] text-gray-500 dark:text-gray-400">
-                        <p>Dopravce: <span class="font-bold text-slate-700 dark:text-slate-200">${c.carrier || '-'}</span></p>
-                        <p>Vozidlo: <span class="font-bold text-slate-700 dark:text-slate-200">${c.vehicleSize || '-'}</span></p>
+                    <div class="grid grid-cols-2 gap-1 text-[11px] text-gray-500 dark:text-gray-400">
+                        <p>Dopravce: <span class="font-semibold text-slate-700 dark:text-slate-200">${c.carrier || '-'}</span></p>
+                        <p>Vozidlo: <span class="font-semibold text-slate-700 dark:text-slate-200">${c.vehicleSize || '-'}</span></p>
                     </div>
                     <div class="pt-1.5 flex justify-between items-center border-t border-gray-100 dark:border-slate-700">
-                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">Přímé vytáčení:</span>
+                        <span class="text-[10px] text-gray-400 font-semibold uppercase">Přímé vytáčení:</span>
                         ${phoneHtml}
                     </div>
                 </div>`;
             }).join('');
+        }
+
+        // --- NOVINKA: STRUKTURA A MODÁLNÍ OKNO RYCHLÉHO NÁHLEDU KARTY ŘIDIČE ODKUDKOLIV ---
+        function showDriverCard(driverName) {
+            if (!driverName) return;
+            const normName = driverName.trim().toUpperCase();
+
+            const modal = document.getElementById('driverCardModal');
+            const title = document.getElementById('driverCardModalTitle');
+            const body = document.getElementById('driverCardModalBody');
+
+            title.textContent = normName;
+
+            // Vyhledáme profil v lokální databázi
+            const card = localDriverCards.find(c => c.name.toUpperCase() === normName);
+
+            if (card) {
+                const cleanPhone = card.phone ? card.phone.replace(/\s+/g, '') : '';
+                const phoneButton = cleanPhone 
+                    ? `<a href="tel:${cleanPhone}" class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition-colors shadow-sm font-sans tracking-wide">
+                         📞 Zavolat řidiči (${card.phone})
+                       </a>`
+                    : `<div class="text-center text-xs text-gray-400 italic bg-gray-50 p-3 rounded-xl border">Telefonní číslo nebylo zadáno</div>`;
+
+                body.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="bg-gray-50 dark:bg-slate-900 p-3 rounded-xl border border-gray-100 dark:border-slate-800">
+                                <span class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider mb-0.5">SPZ VOZIDLA</span>
+                                <span class="font-black text-slate-800 dark:text-slate-200 text-sm">${card.spz || 'NENÍ ZADÁNA'}</span>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-slate-900 p-3 rounded-xl border border-gray-100 dark:border-slate-800">
+                                <span class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider mb-0.5">DOPRAVCE</span>
+                                <span class="font-black text-slate-800 dark:text-slate-200 text-sm truncate block" title="${card.carrier || '-'}">${card.carrier || 'NEUVEDEN'}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-slate-900 p-3 rounded-xl border border-gray-100 dark:border-slate-800 text-xs">
+                            <span class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider mb-0.5">VELIKOST / TYP VOZIDLA</span>
+                            <span class="font-black text-slate-800 dark:text-slate-200 text-sm">${card.vehicleSize || 'NEUVEDENA'}</span>
+                        </div>
+
+                        <div class="pt-1">
+                            ${phoneButton}
+                        </div>
+                        
+                        <div class="pt-3 border-t border-gray-100 dark:border-slate-700 flex justify-between items-center text-xs">
+                            <button onclick="goToEditDriverCard('${card.id}')" class="text-[#003366] hover:underline font-bold">✏️ Upravit v nastavení</button>
+                            <button onclick="closeDriverCardModal()" class="text-gray-400 hover:text-slate-600 font-semibold">Zavřít</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Pokud karta neexistuje, nabídne se dispečerovi možnost ji okamžitě vytvořit
+                body.innerHTML = `
+                    <div class="space-y-4 text-center py-2">
+                        <div class="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center mx-auto text-amber-500 border border-amber-200 text-lg">
+                            ⚠️
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="text-sm font-bold text-slate-800">Profil řidiče nenalezen</h4>
+                            <p class="text-xs text-gray-400">Pro jméno <b>${normName}</b> nebyla vytvořena karta řidiče.</p>
+                        </div>
+                        <button onclick="quickCreateDriverCardFromModal('${normName}')" class="w-full bg-[#003366] hover:bg-black text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition-colors shadow-sm mt-2">
+                            ➕ Vytvořit kartu řidiče
+                        </button>
+                    </div>
+                `;
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeDriverCardModal() {
+            const modal = document.getElementById('driverCardModal');
+            if (modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        }
+
+        function goToEditDriverCard(cardId) {
+            closeDriverCardModal();
+            closeDetails();
+            switchTab('settings');
+            setTimeout(() => {
+                const detailsEl = document.getElementById('details-driver-cards');
+                if (detailsEl) detailsEl.open = true;
+                editDriverCard(cardId);
+                document.getElementById('details-driver-cards').scrollIntoView({ behavior: 'smooth' });
+            }, 150);
+        }
+
+        function quickCreateDriverCardFromModal(driverName) {
+            closeDriverCardModal();
+            closeDetails();
+            switchTab('settings');
+            setTimeout(() => {
+                const detailsEl = document.getElementById('details-driver-cards');
+                if (detailsEl) detailsEl.open = true;
+                
+                clearDriverCardForm();
+                document.getElementById('driverCardName').value = driverName;
+                document.getElementById('details-driver-cards').scrollIntoView({ behavior: 'smooth' });
+            }, 150);
         }
 
         function switchTab(tabId, event) {
