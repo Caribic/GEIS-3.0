@@ -199,11 +199,11 @@
                     </button>
                 </div>
             </div>
-            <div id="trailerPlansList" class="space-y-1.5"></div>
+            <div id="trailerPlansList" class="space-y-3"></div>
         </div>
     </main>
 
-    <!-- Modální okno nakládky řidiče (OPRAVENO: Pozice items-center a justify-center pro mobilní zobrazení) -->
+    <!-- Modální okno nakládky řidiče -->
     <div id="detailsModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
@@ -249,7 +249,7 @@
         </div>
     </div>
 
-    <!-- Modální okno plánování návěsu (OPRAVENO: items-center a justify-center) -->
+    <!-- Modální okno plánování návěsu -->
     <div id="trailerPlanModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200 dark:border-slate-750">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
@@ -315,7 +315,7 @@
         </div>
     </div>
 
-    <!-- Modální okno detailu Karty řidiče (OPRAVENO: items-center a justify-center) -->
+    <!-- Modální okno detailu Karty řidiče -->
     <div id="driverCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl flex flex-col border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
@@ -332,7 +332,7 @@
         </div>
     </div>
 
-    <!-- Modální okno detailu Karty zákazníka (OPRAVENO: items-center a justify-center) -->
+    <!-- Modální okno detailu Karty zákazníka -->
     <div id="customerCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl flex flex-col border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
@@ -370,7 +370,7 @@
     <!-- Nastavení -->
     <main id="tab-settings" class="hidden-tab p-4 space-y-3">
         
-        <!-- Karta zákazníka -->
+        <!-- KARTA ZÁKAZNÍKA -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group" id="details-customer-cards" open>
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span class="flex items-center gap-1.5">🏢 KARTA ZÁKAZNÍKA</span>
@@ -590,7 +590,7 @@
         </button>
         <button id="nav-settings" onclick="switchTab('settings', event)" class="text-gray-400 flex flex-col items-center transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37.996.608 2.296.07 2.572-1.065"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
             <span class="text-[10px] mt-1 font-bold tracking-wide uppercase">Nastavení</span>
@@ -1511,6 +1511,7 @@
             renderDraftLists();
         }
 
+        // OPRAVENO: Karty denního plánu řidičů mají nyní plný přehled bez ořezávání textu
         function renderTrailersTab() {
             const searchQuery = (document.getElementById('trailerDriverSearch')?.value || '').trim().toUpperCase();
             populateAllDropdowns();
@@ -1532,38 +1533,44 @@
             }
 
             plansList.innerHTML = dayPlans.map(p => `
-                <div class="bg-[#1e293b] text-white rounded-lg p-2.5 flex items-center justify-between gap-3 text-xs shadow-sm hover:border-[#003366] transition-colors">
-                    <!-- Řidič & SPZ -->
-                    <div class="w-[140px] shrink-0 leading-tight">
-                        <span class="text-[8px] font-bold text-slate-400 block tracking-wider truncate mb-0.5">${p.spz && p.spz !== 'BEZ SPZ' ? p.spz : 'BEZ SPZ'}</span>
-                        <h4 class="font-black text-slate-100 uppercase cursor-pointer hover:underline break-words whitespace-normal leading-tight text-[11px]" onclick="showDriverCard('${p.driver}')">👤 ${p.driver}</h4>
+                <div class="bg-[#1e293b] text-white rounded-xl p-3 shadow-sm hover:border-[#003366] transition-colors space-y-2.5">
+                    <!-- Horní řádek: Jméno řidiče, SPZ a ovládací prvky -->
+                    <div class="flex justify-between items-start border-b border-slate-700/50 pb-2">
+                        <div>
+                            <span class="text-[8px] font-bold text-slate-400 block tracking-wider uppercase mb-0.5">${p.spz && p.spz !== 'BEZ SPZ' ? p.spz : 'BEZ SPZ'}</span>
+                            <h4 class="font-black text-slate-100 uppercase cursor-pointer hover:underline text-sm" onclick="showDriverCard('${p.driver}')">👤 ${p.driver}</h4>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <button onclick="editTrailerPlan('${p.id}')" class="text-xs text-amber-500 hover:underline font-bold uppercase tracking-wider">Upravit</button>
+                            <button onclick="deleteTrailerPlan('${p.id}')" class="text-red-400 hover:text-red-600 transition-colors" title="Odstranit">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
                     </div>
                     
-                    <div class="flex-1 min-w-0">
-                        <span class="text-[8px] font-black text-blue-400 uppercase tracking-widest block mb-0.5">ROZVOZ</span>
-                        <div class="flex flex-wrap gap-1">
-                            ${p.deliveries && p.deliveries.length > 0 
-                                ? p.deliveries.map(d => `<span class="bg-blue-900/60 text-blue-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-blue-800 cursor-pointer hover:underline truncate max-w-[80px]" onclick="openCustomerCardFromTile(event, '${d}')" title="${d}">${d}</span>`).join('')
-                                : '<span class="text-[9px] text-slate-500 italic">--</span>'
-                            }
+                    <!-- Spodní sekce: Rozdělená mřížka s plným výpisem rozvozů a svozů -->
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <!-- Rozvozový box -->
+                        <div class="space-y-1.5 bg-slate-800/40 p-2 rounded-lg border border-slate-700/50">
+                            <span class="text-[9px] font-black text-blue-400 uppercase tracking-widest block mb-1">ROZVOZ</span>
+                            <div class="flex flex-col gap-1">
+                                ${p.deliveries && p.deliveries.length > 0 
+                                    ? p.deliveries.map(d => `<span class="bg-blue-950/80 text-blue-200 text-[10px] font-bold px-2 py-1 rounded border border-blue-900 cursor-pointer hover:underline break-words whitespace-normal text-left" onclick="openCustomerCardFromTile(event, '${d}')" title="${d}">${d}</span>`).join('')
+                                    : '<span class="text-[10px] text-slate-500 italic font-medium">Bez rozvozu</span>'
+                                }
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="flex-1 min-w-0">
-                        <span class="text-[8px] font-black text-emerald-600 uppercase tracking-widest block mb-0.5">SVOZ</span>
-                        <div class="flex flex-wrap gap-1">
-                            ${p.pickups && p.pickups.length > 0 
-                                ? p.pickups.map(s => `<span class="bg-green-900/60 text-emerald-200 text-[9px] font-bold px-1.5 py-0.2 rounded border border-green-800 cursor-pointer hover:underline truncate max-w-[80px]" onclick="openCustomerCardFromTile(event, '${s}')" title="${s}">${s}</span>`).join('')
-                                : '<span class="text-[9px] text-slate-500 italic">--</span>'
-                            }
+                        <!-- Svozový box -->
+                        <div class="space-y-1.5 bg-slate-800/40 p-2 rounded-lg border border-slate-700/50">
+                            <span class="text-[9px] font-black text-emerald-400 uppercase tracking-widest block mb-1">SVOZ</span>
+                            <div class="flex flex-col gap-1">
+                                ${p.pickups && p.pickups.length > 0 
+                                    ? p.pickups.map(s => `<span class="bg-emerald-950/80 text-emerald-200 text-[10px] font-bold px-2 py-1 rounded border border-emerald-900 cursor-pointer hover:underline break-words whitespace-normal text-left" onclick="openCustomerCardFromTile(event, '${s}')" title="${s}">${s}</span>`).join('')
+                                    : '<span class="text-[10px] text-slate-500 italic font-medium">Bez svozu</span>'
+                                }
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="flex items-center gap-2 shrink-0">
-                        <button onclick="editTrailerPlan('${p.id}')" class="text-[10px] text-amber-500 hover:underline font-bold uppercase tracking-wider">upravit</button>
-                        <button onclick="deleteTrailerPlan('${p.id}')" class="text-red-500 hover:text-red-700 transition-colors" title="Odstranit">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </button>
                     </div>
                 </div>
             `).join('');
@@ -1879,6 +1886,7 @@
                 .catch(e => alert("Chyba při uložení: " + e.message));
         }
 
+        // --- DYNAMICKÉ AUTOMATICKÉ VYTVOŘENÍ NOVÉ VELIKOSTI VOZIDLA ---
         function quickAddVehicleSize() {
             const name = prompt("Zadejte kapacita/typ nového vozidla:");
             if (!name) return;
@@ -2037,14 +2045,14 @@
                        </a>`
                     : `<div class="text-center text-xs text-gray-400 italic bg-gray-50 p-3 rounded-xl border">Telefonní číslo nebylo zadáno</div>`;
 
-                // OPRAVENO: Odeslání SMS
+                // Odeslání SMS
                 const smsButton = cleanPhone
                     ? `<a href="sms:${cleanPhone}" class="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition-colors shadow-sm font-sans tracking-wide mt-2">
                          💬 Odeslat SMS řidiči
                        </a>`
                     : '';
 
-                // OPRAVENO: Záměna dlaždic (Vozidlo nahoře, Dopravce dole)
+                // Záměna dlaždic (Vozidlo nahoře, Dopravce dole)
                 body.innerHTML = `
                     <div class="space-y-4">
                         <div class="grid grid-cols-2 gap-3 text-xs">
