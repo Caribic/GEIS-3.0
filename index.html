@@ -1,16 +1,24 @@
+Chyba spočívala v tom, že v kódu zcela chyběla HTML struktura modálního okna
+#trailerPlanModal pro zadávání a úpravu plánů návěsů a v JavaScriptu chyběla
+pomocná funkce removeDraftCustomer() pro odebírání vybraných zákazníků z
+konceptu (draftu).
+
+Zde je opravený, kompletní kód souboru index.html, který můžete rovnou
+zkopírovat a nahrát na GitHub.
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Geis - Dispečink Svozů</title>
+    <link class="apple-touch-icon" href="icon-192.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
     
     <!-- PWA podpora pro iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link class="apple-touch-icon" href="icon-192.png">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -191,11 +199,14 @@
     <main id="tab-trailers" class="hidden-tab p-4 space-y-5">
         <!-- PŘEHLED PLÁNŮ (Defaultní zobrazení) -->
         <div id="trailerOverviewContainer" class="space-y-4">
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <h3 class="font-bold text-[#003366] text-xs uppercase tracking-wider">Denní plán nasazení návěsů</h3>
-                <button onclick="showNewTrailerForm()" class="bg-[#003366] hover:bg-[#002244] text-white font-bold text-xs py-2 px-4 rounded-lg uppercase tracking-wider shadow-sm transition-transform active:scale-95">
-                    NOVÝ PLÁN
-                </button>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="trailerDriverSearch" oninput="renderTrailersTab()" placeholder="Hledat..." class="bg-white dark:bg-slate-850 border border-gray-300 dark:border-slate-750 rounded-lg py-1 px-2.5 text-xs font-bold outline-none focus:border-[#003366] uppercase text-[#003366] w-32 sm:w-40">
+                    <button onclick="showNewTrailerForm()" class="bg-[#003366] hover:bg-[#002244] text-white font-bold text-xs py-2 px-4 rounded-lg uppercase tracking-wider shadow-sm transition-transform active:scale-95">
+                        NOVÝ PLÁN
+                    </button>
+                </div>
             </div>
             <div id="trailerPlansList" class="space-y-1.5"></div>
         </div>
@@ -244,6 +255,73 @@
         </div>
     </div>
 
+    <!-- Modální okno plánování návěsu (OPRAVENO: Doplněno chybějící modální okno) -->
+    <div id="trailerPlanModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200 dark:border-slate-750">
+            <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
+                <div>
+                    <h2 id="trailerModalTitle" class="text-lg font-black leading-tight uppercase text-white">Zapsat plán návěsu (33 EUR)</h2>
+                    <p class="text-xs text-slate-200 mt-0.5 font-medium">Plánování nasazení na den</p>
+                </div>
+                <button onclick="closeTrailerModal()" class="bg-[#002244] hover:bg-[#001530] text-white rounded-full p-1.5 text-xs font-bold w-7 h-7 flex items-center justify-center transition-colors">✕</button>
+            </div>
+            
+            <div class="p-4 space-y-4 overflow-y-auto flex-1">
+                <div class="space-y-3">
+                    <!-- Výběr řidiče -->
+                    <div>
+                        <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Interní řidič</label>
+                        <div class="flex gap-2 mt-1">
+                            <select id="trailerDriverSelect" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366]">
+                                <option value="" disabled selected>Vyberte řidiče...</option>
+                            </select>
+                            <button onclick="quickAddInternalDriver()" class="bg-[#003366] text-white font-bold px-3 rounded-lg h-10 hover:bg-black transition-colors" title="Rychle přidat interního řidiče">+</button>
+                        </div>
+                    </div>
+
+                    <!-- SPZ Návěsu -->
+                    <div>
+                        <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">SPZ Návěsu</label>
+                        <input type="text" id="trailerSPZInput" placeholder="Např. 3H1 1234" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-750 rounded-lg p-2 mt-1 text-sm font-bold uppercase h-10 shadow-sm focus:border-[#003366]">
+                    </div>
+
+                    <!-- Přidat rozvoz -->
+                    <div>
+                        <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Přiřadit rozvoz (zákazník)</label>
+                        <div class="flex gap-2 mt-1">
+                            <select id="trailerDeliverySelect" onchange="autoAddDraftCustomer('delivery', this)" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366]">
+                                <option value="" disabled selected>Vyberte rozvoz...</option>
+                            </select>
+                            <button onclick="quickAddCustomer('delivery')" class="bg-[#003366] text-white font-bold px-3 rounded-lg h-10 hover:bg-black transition-colors" title="Rychle vytvořit rozvozového zákazníka">+</button>
+                        </div>
+                        <div id="draftDeliveriesList" class="flex flex-wrap gap-1 mt-2"></div>
+                    </div>
+
+                    <!-- Přidat svoz -->
+                    <div>
+                        <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Přiřadit svoz (zákazník)</label>
+                        <div class="flex gap-2 mt-1">
+                            <select id="trailerPickupSelect" onchange="autoAddDraftCustomer('pickup', this)" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366]">
+                                <option value="" disabled selected>Vyberte svoz...</option>
+                            </select>
+                            <button onclick="quickAddCustomer('pickup')" class="bg-[#003366] text-white font-bold px-3 rounded-lg h-10 hover:bg-black transition-colors" title="Rychle vytvořit svozového zákazníka">+</button>
+                        </div>
+                        <div id="draftPickupsList" class="flex flex-wrap gap-1 mt-2"></div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100 dark:border-slate-700 flex gap-2">
+                    <button id="btnSaveTrailerPlan" onclick="saveTrailerPlan()" class="flex-1 bg-[#003366] hover:bg-[#002244] text-white font-bold py-3 rounded-lg text-xs transition-colors shadow-sm active:scale-[0.99] uppercase tracking-wider">
+                        Uložit plán řidiče na tento den
+                    </button>
+                    <button onclick="closeTrailerModal()" class="bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-3 rounded-lg font-bold text-xs transition-colors uppercase tracking-wider">
+                        Zrušit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modální okno detailu Karty řidiče -->
     <div id="driverCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl flex flex-col border border-gray-200">
@@ -261,7 +339,7 @@
         </div>
     </div>
 
-    <!-- NOVÉ: Modální okno detailu Karty zákazníka -->
+    <!-- Modální okno detailu Karty zákazníka -->
     <div id="customerCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-6 sm:items-center sm:pt-0 justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl flex flex-col border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
@@ -299,7 +377,7 @@
     <!-- Nastavení (sbalitelné akordeony a karty řidičů s dynamickými dropdowny) -->
     <main id="tab-settings" class="hidden-tab p-4 space-y-3">
         
-        <!-- NOVINKA: KARTY ZÁKAZNÍKŮ S ADRESOU A KONTAKTY -->
+        <!-- Karty zákazníků s adresou a kontakty -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group" id="details-customer-cards" open>
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span class="flex items-center gap-1.5">🏢 Karty zákazníků (Kontakty & Adresy)</span>
@@ -802,6 +880,16 @@
             }, 100);
         }
 
+        // Pomocná funkce k odstranění zákazníka z konceptu
+        function removeDraftCustomer(type, index) {
+            if (type === 'delivery') {
+                draftDeliveries.splice(index, 1);
+            } else {
+                draftPickups.splice(index, 1);
+            }
+            renderDraftLists();
+        }
+
         // Globální vyhledávací systém
         function performGlobalDriverSearch(query) {
             const resultsContainer = document.getElementById('globalSearchResults');
@@ -1058,7 +1146,7 @@
             // Název zákazníka v záhlaví modálu je proklikávací na jeho Kartu
             document.getElementById('modalCustomerName').innerHTML = `
                 <div class="flex items-center gap-3">
-                    <span class="hover:underline cursor-pointer" onclick="showCustomerCard('${t.customer}')">🏢 ${t.customer}</span>
+                    <span class="hover:underline cursor-pointer" onclick="event.stopPropagation(); showCustomerCard('${t.customer}')">🏢 ${t.customer}</span>
                     <button onclick="editTarget('${t.id}')" class="text-slate-300 hover:text-[#003366] p-1.5 rounded-lg hover:bg-[#002244] transition-colors" title="Upravit dnešní plán">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
@@ -1459,7 +1547,6 @@
             renderDraftLists();
         }
 
-        // OPRAVENO: Výpis karet denního plánu - jméno se zalamuje přehledně na dva řádky (w-[140px])
         function renderTrailersTab() {
             const searchQuery = (document.getElementById('trailerDriverSearch')?.value || '').trim().toUpperCase();
             populateAllDropdowns();
@@ -1480,10 +1567,9 @@
                 return;
             }
 
-            // Šabloně byl přidán pevný sloupec pro jméno w-[140px] se zalamováním break-words a whitespace-normal pro zalomení na 2 řádky
             plansList.innerHTML = dayPlans.map(p => `
                 <div class="bg-[#1e293b] text-white rounded-lg p-2.5 flex items-center justify-between gap-3 text-xs shadow-sm hover:border-[#003366] transition-colors">
-                    <!-- 1. Řidič & SPZ (Optimalizováno pro zalomení na 2 řádky) -->
+                    <!-- Řidič & SPZ -->
                     <div class="w-[140px] shrink-0 leading-tight">
                         <span class="text-[8px] font-bold text-slate-400 block tracking-wider truncate mb-0.5">${p.spz && p.spz !== 'BEZ SPZ' ? p.spz : 'BEZ SPZ'}</span>
                         <h4 class="font-black text-slate-100 uppercase cursor-pointer hover:underline break-words whitespace-normal leading-tight text-[11px]" onclick="showDriverCard('${p.driver}')">👤 ${p.driver}</h4>
@@ -1714,7 +1800,7 @@
             document.body.removeChild(link);
         }
 
-        // --- EXPORT AKTIVNÍHO DNE (SVOZY + ŘIDIČI + NÁVĚSY) ---
+        // --- EXPORT AKTIVNÍHO DNE ---
         function exportDailyDetailedToExcel() {
             const targets = localDailyTargets.filter(t => t.date === activeDate);
             if (targets.length === 0) {
@@ -1785,7 +1871,7 @@
             document.getElementById('settingsVehiclesList').innerHTML = buildList(vehicles, 'vehicles');
             
             renderDriverCardsList(); 
-            renderCustomerCardsList(); // Načtení seznamu zákaznických karet
+            renderCustomerCardsList();
         }
 
         function addItem(key, inputId) {
@@ -1829,7 +1915,7 @@
         }
 
         function quickAddVehicleSize() {
-            const name = prompt("Zadejte kapacitu/typ nového vozidla:");
+            const name = prompt("Zadejte kapacita/typ nového vozidla:");
             if (!name) return;
             const formatted = name.trim().toUpperCase();
             if (!formatted) return;
@@ -2066,7 +2152,7 @@
             }, 150);
         }
 
-        // --- NOVINKA: LOGIKA KARTY ZÁKAZNÍKA (Ukládání / Editace / Mazání / Vykreslení) ---
+        // --- LOGIKA KARTY ZÁKAZNÍKA ---
         function saveCustomerCard() {
             const idInput = document.getElementById('editCustomerCardId');
             const nameInput = document.getElementById('customerCardName');
