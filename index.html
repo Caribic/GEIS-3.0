@@ -203,8 +203,8 @@
         </div>
     </main>
 
-    <!-- Modální okno nakládky řidiče (OPRAVENO: Formulář nakládky je nahoře u zelené čáry, stav palet až pod ním) -->
-    <div id="detailsModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-2 sm:items-center sm:pt-0 justify-center p-4">
+    <!-- Modální okno nakládky řidiče (OPRAVENO: Pozice items-center a justify-center pro mobilní zobrazení) -->
+    <div id="detailsModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -215,10 +215,10 @@
             </div>
             
             <div class="p-4 space-y-4 overflow-y-auto flex-1">
-                <!-- 1. Formulář pro zápis nakládky (Nyní nahoře na úrovni zelené čáry) -->
+                <!-- 1. Formulář pro zápis nakládky -->
                 <div id="modalFormContainer"></div>
 
-                <!-- 2. Stav zbývajících palet k odvozu (Přesunuto pod formulář) -->
+                <!-- 2. Stav zbývajících palet k odvozu -->
                 <div class="grid grid-cols-3 gap-1.5">
                     <div id="modalFPBox" class="text-center p-2 rounded-xl border">
                         <span id="modalFPLabel" class="text-[9px] uppercase font-bold text-gray-400 block tracking-wider">FP</span>
@@ -249,8 +249,8 @@
         </div>
     </div>
 
-    <!-- Modální okno plánování návěsu -->
-    <div id="trailerPlanModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-2 sm:items-center sm:pt-0 justify-center p-4">
+    <!-- Modální okno plánování návěsu (OPRAVENO: items-center a justify-center) -->
+    <div id="trailerPlanModal" class="fixed inset-0 z-30 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-xl flex flex-col max-h-[90vh] border border-gray-200 dark:border-slate-750">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -262,7 +262,7 @@
             
             <div class="p-4 space-y-4 overflow-y-auto flex-1">
                 <div class="space-y-3">
-                    <!-- Výběr řidiče (Unified Evidence) -->
+                    <!-- Výběr řidiče (Evidence řidičů) -->
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Interní řidič</label>
                         <div class="flex gap-2 mt-1">
@@ -315,8 +315,8 @@
         </div>
     </div>
 
-    <!-- Modální okno detailu Karty řidiče -->
-    <div id="driverCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-2 sm:items-center sm:pt-0 justify-center p-4">
+    <!-- Modální okno detailu Karty řidiče (OPRAVENO: items-center a justify-center) -->
+    <div id="driverCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl flex flex-col border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -332,8 +332,8 @@
         </div>
     </div>
 
-    <!-- Modální okno detailu Karty zákazníka -->
-    <div id="customerCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-start pt-2 sm:items-center sm:pt-0 justify-center p-4">
+    <!-- Modální okno detailu Karty zákazníka (OPRAVENO: items-center a justify-center) -->
+    <div id="customerCardModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl flex flex-col border border-gray-200">
             <div class="bg-[#003366] p-4 text-white flex justify-between items-start border-b-4 border-[#002244]">
                 <div>
@@ -367,10 +367,10 @@
         <div id="statsContent" class="space-y-4"></div>
     </main>
 
-    <!-- Nastavení (OPRAVENO: Texty dle snímku, odstraněna sekce 'Řidiči (Návěsy 33 EUR)') -->
+    <!-- Nastavení -->
     <main id="tab-settings" class="hidden-tab p-4 space-y-3">
         
-        <!-- KARTA ZÁKAZNÍKA -->
+        <!-- Karta zákazníka -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group" id="details-customer-cards" open>
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span class="flex items-center gap-1.5">🏢 KARTA ZÁKAZNÍKA</span>
@@ -543,7 +543,7 @@
             </div>
         </details>
 
-        <!-- EVIDENCE ŘIDIČŮ (OPRAVENO: Jednotná správa, smazán starý duplicitní akordeon) -->
+        <!-- EVIDENCE ŘIDIČŮ -->
         <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span>EVIDENCE ŘIDIČŮ</span>
@@ -590,7 +590,7 @@
         </button>
         <button id="nav-settings" onclick="switchTab('settings', event)" class="text-gray-400 flex flex-col items-center transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37.996.608 2.296.07 2.572-1.065"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
             <span class="text-[10px] mt-1 font-bold tracking-wide uppercase">Nastavení</span>
