@@ -111,11 +111,11 @@
                 </div>
             </div>
 
-            <!-- Kompaktní ovládání kalendáře -->
+            <!-- Kompaktní ovládání kalendáře (OPRAVENO: Šedý podklad kontrolek) -->
             <div id="headerDateControls" class="flex items-center gap-1 shrink-0">
-                <button onclick="stepDate(-1)" class="w-7 h-7 flex items-center justify-center bg-gray-50 active:bg-gray-200 border border-gray-200 rounded text-[9px] font-bold text-slate-700 shadow-sm transition-colors">◀</button>
-                <input type="date" id="appDatePicker" onchange="setDate(this.value)" class="h-7 text-[10px] font-bold text-[#003366] dark:text-blue-300 border border-gray-300 rounded px-1.5 bg-white dark:bg-slate-800 text-center focus:outline-none shadow-sm cursor-pointer w-[95px] sm:w-[110px]">
-                <button onclick="stepDate(1)" class="w-7 h-7 flex items-center justify-center bg-gray-50 active:bg-gray-200 border border-gray-200 rounded text-[9px] font-bold text-slate-700 shadow-sm transition-colors">▶</button>
+                <button onclick="stepDate(-1)" class="w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 active:bg-gray-300 border border-gray-300 rounded text-[9px] font-bold text-slate-700 shadow-sm transition-colors">◀</button>
+                <input type="date" id="appDatePicker" onchange="setDate(this.value)" class="h-7 text-[10px] font-bold text-[#003366] dark:text-blue-300 border border-gray-300 rounded px-1.5 bg-gray-100 dark:bg-slate-800 text-center focus:outline-none shadow-sm cursor-pointer w-[95px] sm:w-[110px]">
+                <button onclick="stepDate(1)" class="w-7 h-7 flex items-center justify-center bg-gray-100 hover:bg-gray-200 active:bg-gray-300 border border-gray-300 rounded text-[9px] font-bold text-slate-700 shadow-sm transition-colors">▶</button>
             </div>
         </div>
 
@@ -142,7 +142,7 @@
                 <div class="sm:col-span-2">
                     <label class="text-[11px] font-semibold text-gray-400 uppercase">Zákazník</label>
                     <div class="flex gap-2 mt-1">
-                        <select id="targetCustomer" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
+                        <select id="targetCustomer" class="w-full bg-slate-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366] text-black dark:text-white">
                             <option value="" disabled selected>Vyberte zákazníka...</option>
                         </select>
                         <button onclick="quickAddCustomer('pickup')" class="bg-[#003366] text-white font-bold px-3 rounded-lg h-10 hover:bg-black transition-colors" title="Rychle vytvořit svozového zákazníka">+</button>
@@ -151,15 +151,15 @@
                 <div class="sm:col-span-2 grid grid-cols-3 gap-1.5">
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase">Cíl FP</label>
-                        <input type="number" id="targetFP" placeholder="0" min="0" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                        <input type="number" id="targetFP" placeholder="0" min="0" class="w-full bg-slate-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-black dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
                     </div>
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase">Cíl KH</label>
-                        <input type="number" id="targetKH" placeholder="0" min="0" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                        <input type="number" id="targetKH" placeholder="0" min="0" class="w-full bg-slate-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-black dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
                     </div>
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase">Cíl PK</label>
-                        <input type="number" id="targetPK" placeholder="0" min="0" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                        <input type="number" id="targetPK" placeholder="0" min="0" class="w-full bg-slate-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-black dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
                     </div>
                 </div>
             </div>
@@ -372,16 +372,16 @@
         <div id="statsContent" class="space-y-4"></div>
     </main>
 
-    <!-- Nastavení (OPRAVENO: Levý modrý pruh border-l-4 pro karty a barva písma v polích) -->
+    <!-- Nastavení -->
     <main id="tab-settings" class="hidden-tab p-4 space-y-3">
         
         <!-- KARTA ZÁKAZNÍKA -->
-        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group" id="details-customer-cards" open>
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+        <details class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden group" id="details-customer-cards" open>
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-sm text-white bg-[#003366] dark:bg-slate-900 uppercase tracking-wider select-none list-none shadow-sm">
                 <span class="flex items-center gap-1.5">🏢 KARTA ZÁKAZNÍKA</span>
-                <span class="transition-transform group-open:rotate-180 text-gray-400">▼</span>
+                <span class="transition-transform group-open:rotate-180 text-white/80">▼</span>
             </summary>
-            <div class="p-4 space-y-4">
+            <div class="p-4 space-y-4 bg-white dark:bg-slate-800">
                 <div class="bg-gray-50 dark:bg-slate-900 p-3.5 rounded-xl border border-gray-200 dark:border-slate-800 space-y-3">
                     <input type="hidden" id="editCustomerCardId" value="">
                     <h4 id="customerCardFormTitle" class="text-xs font-black text-[#003366] dark:text-blue-300 uppercase tracking-wide">Nový profil zákazníka</h4>
@@ -389,23 +389,23 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Název zákazníka</label>
-                            <input type="text" id="customerCardName" placeholder="Např. HP TRONIC" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
+                            <input type="text" id="customerCardName" placeholder="Např. HP TRONIC" class="w-full bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Kontaktní osoba</label>
-                            <input type="text" id="customerCardContact" placeholder="Např. Jan Novák" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
+                            <input type="text" id="customerCardContact" placeholder="Např. Jan Novák" class="w-full bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Telefonní číslo</label>
-                            <input type="tel" id="customerCardPhone" placeholder="Např. +420 601 234 567" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
+                            <input type="tel" id="customerCardPhone" placeholder="Např. +420 601 234 567" class="w-full bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">E-mail</label>
-                            <input type="email" id="customerCardEmail" placeholder="Např. info@firma.cz" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
+                            <input type="email" id="customerCardEmail" placeholder="Např. info@firma.cz" class="w-full bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div class="sm:col-span-2">
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Adresa provozovny</label>
-                            <input type="text" id="customerCardAddress" placeholder="Ulice, č.p., Město" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
+                            <input type="text" id="customerCardAddress" placeholder="Ulice, č.p., Město" class="w-full bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                     </div>
                     
@@ -425,12 +425,12 @@
         </details>
 
         <!-- KARTA ŘIDIČE -->
-        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group" id="details-driver-cards">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+        <details class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden group" id="details-driver-cards">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-sm text-white bg-[#003366] dark:bg-slate-900 uppercase tracking-wider select-none list-none shadow-sm">
                 <span class="flex items-center gap-1.5">📇 KARTA ŘIDIČE</span>
-                <span class="transition-transform group-open:rotate-180 text-gray-400">▼</span>
+                <span class="transition-transform group-open:rotate-180 text-white/80">▼</span>
             </summary>
-            <div class="p-4 space-y-4">
+            <div class="p-4 space-y-4 bg-white dark:bg-slate-800">
                 <div class="bg-gray-50 dark:bg-slate-900 p-3.5 rounded-xl border border-gray-200 dark:border-slate-800 space-y-3">
                     <input type="hidden" id="editDriverCardId" value="">
                     <h4 id="driverCardFormTitle" class="text-xs font-black text-[#003366] dark:text-blue-300 uppercase tracking-wide">Nový profil řidiče</h4>
@@ -438,18 +438,18 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Jméno řidiče</label>
-                            <input type="text" id="driverCardName" placeholder="Např. VRABEC" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
+                            <input type="text" id="driverCardName" placeholder="Např. VRABEC" class="w-full bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">SPZ Vozidla</label>
-                            <input type="text" id="driverCardSPZ" placeholder="Např. 3H1 1234" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
+                            <input type="text" id="driverCardSPZ" placeholder="Např. 3H1 1234" class="w-full bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         
                         <!-- ROLOVACÍ DOPRAVCE S + TLAČÍTKEM -->
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Dopravce</label>
                             <div class="flex gap-1.5 mt-1">
-                                <select id="driverCardCarrier" class="flex-1 bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
+                                <select id="driverCardCarrier" class="flex-1 bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                                     <option value="" disabled selected>Vyberte dopravce...</option>
                                 </select>
                                 <button onclick="quickAddCarrier()" class="bg-[#003366] text-white font-bold px-2.5 rounded-lg text-xs hover:bg-black transition-colors" title="Přidat nového dopravce">+</button>
@@ -458,14 +458,14 @@
 
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Telefonní číslo</label>
-                            <input type="tel" id="driverCardPhone" placeholder="Např. +420 777 123 456" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
+                            <input type="tel" id="driverCardPhone" placeholder="Např. +420 777 123 456" class="w-full bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
 
                         <!-- ROLOVACÍ VELIKOST VOZIDLA S + TLAČÍTKEM -->
                         <div class="sm:col-span-2">
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Velikost vozidla</label>
                             <div class="flex gap-1.5 mt-1">
-                                <select id="driverCardSize" class="flex-1 bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
+                                <select id="driverCardSize" class="flex-1 bg-white dark:bg-slate-850 border border-gray-300 rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                                     <option value="" disabled selected>Vyberte velikost vozidla...</option>
                                 </select>
                                 <button onclick="quickAddVehicleSize()" class="bg-[#003366] text-white font-bold px-2.5 rounded-lg text-xs hover:bg-black transition-colors" title="Přidat velikost vozidla">+</button>
@@ -489,14 +489,14 @@
         </details>
 
         <!-- DOPRAVCI -->
-        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+        <details class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden group">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-sm text-white bg-[#003366] dark:bg-slate-900 uppercase tracking-wider select-none list-none shadow-sm">
                 <span>DOPRAVCI</span>
-                <span class="transition-transform group-open:rotate-180">▼</span>
+                <span class="transition-transform group-open:rotate-180 text-white/80">▼</span>
             </summary>
-            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
+            <div class="p-4 pt-0 bg-white dark:bg-slate-800 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newCarrierName" placeholder="Název nového dopravce" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
+                    <input type="text" id="newCarrierName" placeholder="Název nového dopravce" class="flex-1 bg-slate-50 border border-gray-300 rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('carriers', 'newCarrierName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsCarriersList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -504,14 +504,14 @@
         </details>
 
         <!-- VOZIDLA -->
-        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+        <details class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden group">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-sm text-white bg-[#003366] dark:bg-slate-900 uppercase tracking-wider select-none list-none shadow-sm">
                 <span>VOZIDLA</span>
-                <span class="transition-transform group-open:rotate-180">▼</span>
+                <span class="transition-transform group-open:rotate-180 text-white/80">▼</span>
             </summary>
-            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
+            <div class="p-4 pt-0 bg-white dark:bg-slate-800 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newVehicleSizeName" placeholder="Typ / kapacita vozidla" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
+                    <input type="text" id="newVehicleSizeName" placeholder="Typ / kapacita vozidla" class="flex-1 bg-slate-50 border border-gray-300 rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('vehicles', 'newVehicleSizeName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsVehiclesList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -519,14 +519,14 @@
         </details>
 
         <!-- ZÁKAZNÍCI - ROZVOZ -->
-        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+        <details class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden group">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-sm text-white bg-[#003366] dark:bg-slate-900 uppercase tracking-wider select-none list-none shadow-sm">
                 <span>ZÁKAZNÍCI - ROZVOZ</span>
-                <span class="transition-transform group-open:rotate-180">▼</span>
+                <span class="transition-transform group-open:rotate-180 text-white/80">▼</span>
             </summary>
-            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
+            <div class="p-4 pt-0 bg-white dark:bg-slate-800 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newCustomerDeliveryName" placeholder="Název rozvozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
+                    <input type="text" id="newCustomerDeliveryName" placeholder="Název rozvozového zákazníka" class="flex-1 bg-slate-50 border border-gray-300 rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('customersDelivery', 'newCustomerDeliveryName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsCustomersDeliveryList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -534,14 +534,14 @@
         </details>
 
         <!-- ZÁKAZNÍCI - SVOZ -->
-        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+        <details class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden group">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-sm text-white bg-[#003366] dark:bg-slate-900 uppercase tracking-wider select-none list-none shadow-sm">
                 <span>ZÁKAZNÍCI - SVOZ</span>
-                <span class="transition-transform group-open:rotate-180">▼</span>
+                <span class="transition-transform group-open:rotate-180 text-white/80">▼</span>
             </summary>
-            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
+            <div class="p-4 pt-0 bg-white dark:bg-slate-800 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newCustomerPickupName" placeholder="Název svozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
+                    <input type="text" id="newCustomerPickupName" placeholder="Název svozového zákazníka" class="flex-1 bg-slate-50 border border-gray-300 rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('customersPickup', 'newCustomerPickupName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsCustomersPickupList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -549,14 +549,14 @@
         </details>
 
         <!-- EVIDENCE ŘIDIČŮ -->
-        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
-            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
+        <details class="bg-white dark:bg-slate-800 rounded-xl shadow-md border border-gray-200 dark:border-slate-700 overflow-hidden group">
+            <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-sm text-white bg-[#003366] dark:bg-slate-900 uppercase tracking-wider select-none list-none shadow-sm">
                 <span>EVIDENCE ŘIDIČŮ</span>
-                <span class="transition-transform group-open:rotate-180">▼</span>
+                <span class="transition-transform group-open:rotate-180 text-white/80">▼</span>
             </summary>
-            <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
+            <div class="p-4 pt-0 bg-white dark:bg-slate-800 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newDriverName" placeholder="Jméno řidiče" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
+                    <input type="text" id="newDriverName" placeholder="Jméno řidiče" class="flex-1 bg-slate-50 border border-gray-300 rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('drivers', 'newDriverName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsDriversList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -736,60 +736,6 @@
             populateAllDropdowns();
             renderCounterTab();
             renderTrailersTab();
-        }
-
-        // --- EXPORT AKTIVNÍHO DATA DO ZÁLOHY ---
-        function exportData() {
-            const backup = {
-                dailyTargets: localDailyTargets,
-                pickups: localPickups,
-                trailerPlans: localTrailerPlans,
-                driverCards: localDriverCards,
-                customerCards: localCustomerCards,
-                timestamp: new Date().toISOString()
-            };
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `geis_svozy_zaloha_${getTodayStr()}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-        }
-
-        // --- IMPORT DATA ZE ZÁLOHY ---
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const parsed = JSON.parse(e.target.result);
-                    if (confirm("Opravdu chcete importovat data ze zálohy? Stávající lokální konfigurace a plány budou přepsány importovanými daty.")) {
-                        // Nahrání do Firestore
-                        if (parsed.dailyTargets) {
-                            parsed.dailyTargets.forEach(t => db.collection("dailyTargets").doc(t.id).set(t));
-                        }
-                        if (parsed.pickups) {
-                            parsed.pickups.forEach(p => db.collection("pickups").doc(p.id).set(p));
-                        }
-                        if (parsed.trailerPlans) {
-                            parsed.trailerPlans.forEach(tp => db.collection("trailerPlans").doc(tp.id).set(tp));
-                        }
-                        if (parsed.driverCards) {
-                            parsed.driverCards.forEach(dc => db.collection("driverCards").doc(dc.id).set(dc));
-                        }
-                        if (parsed.customerCards) {
-                            parsed.customerCards.forEach(cc => db.collection("customerCards").doc(cc.id).set(cc));
-                        }
-                        alert("Data byla úspěšně importována a uložena do databáze.");
-                    }
-                } catch (err) {
-                    alert("Chyba při čtení záložního souboru: " + err.message);
-                }
-            };
-            reader.readAsText(file);
         }
 
         function stepDate(days) {
@@ -1419,13 +1365,13 @@
                 let tileHtml = '';
                 if (isDone) {
                     tileHtml = `
-                    <div class="bg-[#ecfdf5] dark:bg-emerald-950/40 border-l-[3px] border-[#96c11f] border-y border-r border-gray-200 dark:border-slate-700 rounded-lg p-2 shadow-sm active:scale-95 transition-all cursor-pointer flex flex-col justify-between h-[72px]" onclick="openDetails('${t.id}')">
-                        <div class="font-bold text-emerald-800 dark:text-emerald-300 text-xs truncate flex justify-between items-center">
+                    <div class="bg-emerald-700 dark:bg-emerald-800 text-white rounded-lg p-2.5 shadow-sm active:scale-95 transition-all cursor-pointer flex flex-col justify-between h-[72px]" onclick="openDetails('${t.id}')">
+                        <div class="font-bold text-white text-xs truncate flex justify-between items-center">
                             <!-- OPRAVENO: Karta zákazníka se otevírá striktně při kliku na jeho název -->
                             <span class="hover:underline cursor-pointer" onclick="openCustomerCardFromTile(event, '${t.customer}')">🏢 ${t.customer}</span>
-                            <span class="text-[10px] text-[#96c11f]">✓</span>
+                            <span class="text-xs text-white">✓</span>
                         </div>
-                        <div class="text-[9px] font-black text-center text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/50 py-0.5 rounded uppercase tracking-wider leading-none mt-auto">
+                        <div class="text-[9px] font-black text-center text-white bg-emerald-800/80 dark:bg-emerald-950/50 py-1 rounded uppercase tracking-wider leading-none mt-auto">
                             HOTOVO
                         </div>
                     </div>`;
@@ -1570,7 +1516,6 @@
             renderDraftLists();
         }
 
-        // OPRAVENO: Karty denního plánu řidičů mají nyní plný přehled bez ořezávání textu
         function renderTrailersTab() {
             const searchQuery = (document.getElementById('trailerDriverSearch')?.value || '').trim().toUpperCase();
             populateAllDropdowns();
