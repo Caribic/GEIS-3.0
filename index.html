@@ -36,6 +36,11 @@
         .bg-geis-blue { background-color: #003366; }
         .border-geis-blue { border-color: #003366; }
 
+        /* Globální vynucení kontrastu pro vstupní pole zamezující iOS chybám */
+        input, select {
+            color: #111827 !important; /* Tmavě šedá / černá ve světlém režimu */
+        }
+
         /* Tmavý režim */
         body.dark-mode {
             background-color: #121212;
@@ -367,11 +372,11 @@
         <div id="statsContent" class="space-y-4"></div>
     </main>
 
-    <!-- Nastavení -->
+    <!-- Nastavení (OPRAVENO: Levý modrý pruh border-l-4 pro karty a barva písma v polích) -->
     <main id="tab-settings" class="hidden-tab p-4 space-y-3">
         
         <!-- KARTA ZÁKAZNÍKA -->
-        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group" id="details-customer-cards" open>
+        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group" id="details-customer-cards" open>
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span class="flex items-center gap-1.5">🏢 KARTA ZÁKAZNÍKA</span>
                 <span class="transition-transform group-open:rotate-180 text-gray-400">▼</span>
@@ -384,23 +389,23 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Název zákazníka</label>
-                            <input type="text" id="customerCardName" placeholder="Např. HP TRONIC" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                            <input type="text" id="customerCardName" placeholder="Např. HP TRONIC" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Kontaktní osoba</label>
-                            <input type="text" id="customerCardContact" placeholder="Např. Jan Novák" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                            <input type="text" id="customerCardContact" placeholder="Např. Jan Novák" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Telefonní číslo</label>
-                            <input type="tel" id="customerCardPhone" placeholder="Např. +420 601 234 567" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                            <input type="tel" id="customerCardPhone" placeholder="Např. +420 601 234 567" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">E-mail</label>
-                            <input type="email" id="customerCardEmail" placeholder="Např. info@firma.cz" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                            <input type="email" id="customerCardEmail" placeholder="Např. info@firma.cz" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div class="sm:col-span-2">
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Adresa provozovny</label>
-                            <input type="text" id="customerCardAddress" placeholder="Ulice, č.p., Město" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                            <input type="text" id="customerCardAddress" placeholder="Ulice, č.p., Město" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                     </div>
                     
@@ -420,7 +425,7 @@
         </details>
 
         <!-- KARTA ŘIDIČE -->
-        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group" id="details-driver-cards">
+        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group" id="details-driver-cards">
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span class="flex items-center gap-1.5">📇 KARTA ŘIDIČE</span>
                 <span class="transition-transform group-open:rotate-180 text-gray-400">▼</span>
@@ -433,18 +438,18 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Jméno řidiče</label>
-                            <input type="text" id="driverCardName" placeholder="Např. VRABEC" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                            <input type="text" id="driverCardName" placeholder="Např. VRABEC" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">SPZ Vozidla</label>
-                            <input type="text" id="driverCardSPZ" placeholder="Např. 3H1 1234" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                            <input type="text" id="driverCardSPZ" placeholder="Např. 3H1 1234" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
                         
                         <!-- ROLOVACÍ DOPRAVCE S + TLAČÍTKEM -->
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Dopravce</label>
                             <div class="flex gap-1.5 mt-1">
-                                <select id="driverCardCarrier" class="flex-1 bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                                <select id="driverCardCarrier" class="flex-1 bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                                     <option value="" disabled selected>Vyberte dopravce...</option>
                                 </select>
                                 <button onclick="quickAddCarrier()" class="bg-[#003366] text-white font-bold px-2.5 rounded-lg text-xs hover:bg-black transition-colors" title="Přidat nového dopravce">+</button>
@@ -453,14 +458,14 @@
 
                         <div>
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Telefonní číslo</label>
-                            <input type="tel" id="driverCardPhone" placeholder="Např. +420 777 123 456" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                            <input type="tel" id="driverCardPhone" placeholder="Např. +420 777 123 456" class="w-full bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                         </div>
 
                         <!-- ROLOVACÍ VELIKOST VOZIDLA S + TLAČÍTKEM -->
                         <div class="sm:col-span-2">
                             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Velikost vozidla</label>
                             <div class="flex gap-1.5 mt-1">
-                                <select id="driverCardSize" class="flex-1 bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                                <select id="driverCardSize" class="flex-1 bg-white dark:bg-slate-850 border rounded-lg p-2 text-xs font-semibold outline-none focus:border-[#003366] text-black dark:text-white">
                                     <option value="" disabled selected>Vyberte velikost vozidla...</option>
                                 </select>
                                 <button onclick="quickAddVehicleSize()" class="bg-[#003366] text-white font-bold px-2.5 rounded-lg text-xs hover:bg-black transition-colors" title="Přidat velikost vozidla">+</button>
@@ -484,14 +489,14 @@
         </details>
 
         <!-- DOPRAVCI -->
-        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span>DOPRAVCI</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newCarrierName" placeholder="Název nového dopravce" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                    <input type="text" id="newCarrierName" placeholder="Název nového dopravce" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('carriers', 'newCarrierName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsCarriersList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -499,14 +504,14 @@
         </details>
 
         <!-- VOZIDLA -->
-        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span>VOZIDLA</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newVehicleSizeName" placeholder="Typ / kapacita vozidla" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                    <input type="text" id="newVehicleSizeName" placeholder="Typ / kapacita vozidla" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('vehicles', 'newVehicleSizeName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsVehiclesList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -514,14 +519,14 @@
         </details>
 
         <!-- ZÁKAZNÍCI - ROZVOZ -->
-        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span>ZÁKAZNÍCI - ROZVOZ</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newCustomerDeliveryName" placeholder="Název rozvozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                    <input type="text" id="newCustomerDeliveryName" placeholder="Název rozvozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('customersDelivery', 'newCustomerDeliveryName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsCustomersDeliveryList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -529,14 +534,14 @@
         </details>
 
         <!-- ZÁKAZNÍCI - SVOZ -->
-        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span>ZÁKAZNÍCI - SVOZ</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newCustomerPickupName" placeholder="Název svozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                    <input type="text" id="newCustomerPickupName" placeholder="Název svozového zákazníka" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('customersPickup', 'newCustomerPickupName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsCustomersPickupList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -544,14 +549,14 @@
         </details>
 
         <!-- EVIDENCE ŘIDIČŮ -->
-        <details class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+        <details class="bg-white rounded-xl shadow-sm border-l-4 border-l-[#003366] border-y border-r border-gray-200 dark:border-slate-700 overflow-hidden group">
             <summary class="flex justify-between items-center p-4 cursor-pointer font-bold text-xs text-[#003366] dark:text-blue-300 uppercase tracking-wider select-none list-none bg-slate-50 border-b border-gray-150">
                 <span>EVIDENCE ŘIDIČŮ</span>
                 <span class="transition-transform group-open:rotate-180">▼</span>
             </summary>
             <div class="p-4 pt-0 border-t border-gray-100 space-y-3">
                 <div class="flex space-x-2 mt-3">
-                    <input type="text" id="newDriverName" placeholder="Jméno řidiče" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-slate-800 dark:text-white">
+                    <input type="text" id="newDriverName" placeholder="Jméno řidiče" class="flex-1 bg-gray-50 border rounded-lg p-2 text-sm outline-none focus:border-[#003366] text-black dark:text-white">
                     <button onclick="addItem('drivers', 'newDriverName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsDriversList" class="max-h-40 overflow-y-auto space-y-1 pr-1 text-sm"></div>
@@ -731,6 +736,60 @@
             populateAllDropdowns();
             renderCounterTab();
             renderTrailersTab();
+        }
+
+        // --- EXPORT AKTIVNÍHO DATA DO ZÁLOHY ---
+        function exportData() {
+            const backup = {
+                dailyTargets: localDailyTargets,
+                pickups: localPickups,
+                trailerPlans: localTrailerPlans,
+                driverCards: localDriverCards,
+                customerCards: localCustomerCards,
+                timestamp: new Date().toISOString()
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `geis_svozy_zaloha_${getTodayStr()}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        // --- IMPORT DATA ZE ZÁLOHY ---
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (confirm("Opravdu chcete importovat data ze zálohy? Stávající lokální konfigurace a plány budou přepsány importovanými daty.")) {
+                        // Nahrání do Firestore
+                        if (parsed.dailyTargets) {
+                            parsed.dailyTargets.forEach(t => db.collection("dailyTargets").doc(t.id).set(t));
+                        }
+                        if (parsed.pickups) {
+                            parsed.pickups.forEach(p => db.collection("pickups").doc(p.id).set(p));
+                        }
+                        if (parsed.trailerPlans) {
+                            parsed.trailerPlans.forEach(tp => db.collection("trailerPlans").doc(tp.id).set(tp));
+                        }
+                        if (parsed.driverCards) {
+                            parsed.driverCards.forEach(dc => db.collection("driverCards").doc(dc.id).set(dc));
+                        }
+                        if (parsed.customerCards) {
+                            parsed.customerCards.forEach(cc => db.collection("customerCards").doc(cc.id).set(cc));
+                        }
+                        alert("Data byla úspěšně importována a uložena do databáze.");
+                    }
+                } catch (err) {
+                    alert("Chyba při čtení záložního souboru: " + err.message);
+                }
+            };
+            reader.readAsText(file);
         }
 
         function stepDate(days) {
@@ -1228,7 +1287,7 @@
                     <div class="flex items-center gap-2">
                         ${phoneButton}
                         <button onclick="editPickup('${p.id}')" class="text-xs text-amber-600 hover:underline font-bold px-1">upravit</button>
-                        <button onclick="deletePickup('${p.id}')" class="text-[#e30613] hover:text-red-700 font-bold px-1 text-sm" title="Stornovat nakládku">✕</button>
+                        <button onclick="deletePickup('${p.id}')" class="text-[#e30613] hover:text-red-800 font-bold px-1 text-sm" title="Stornovat nakládku">✕</button>
                     </div>
                 </div>`;
             });
@@ -1635,7 +1694,7 @@
 
                 pickupList.forEach(p => {
                     const targetObj = targets.find(t => t.id === p.targetId);
-                    const custName = targetObj ? targetObj.customer : "Neznámý";
+                    const custName = targetObj ? targetObj.customer : "Nezmámý";
 
                     if (!customerStats[custName]) customerStats[custName] = { fp: 0, kh: 0, pk: 0 };
                     customerStats[custName].fp += p.fp;
