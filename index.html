@@ -12,8 +12,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS s konfigurací přepínání tmavého režimu přes třídu -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -41,51 +46,51 @@
             color: #1e293b !important;
         }
 
-        /* Tmavý režim */
-        body.dark-mode {
+        /* Tmavý režim vyvolaný pouze třídou .dark */
+        body.dark {
             background-color: #121212;
             color: #f3f4f6;
         }
-        body.dark-mode header,
-        body.dark-mode nav,
-        body.dark-mode .bg-white {
+        body.dark header,
+        body.dark nav,
+        body.dark .bg-white {
             background-color: #1e293b;
             color: #f1f5f9;
             border-color: #334155;
         }
-        body.dark-mode .bg-gray-50,
-        body.dark-mode .bg-slate-50 {
+        body.dark .bg-gray-50,
+        body.dark .bg-slate-50 {
             background-color: #334155;
             color: #f1f5f9;
             border-color: #475569;
         }
-        body.dark-mode input,
-        body.dark-mode select {
+        body.dark input,
+        body.dark select {
             background-color: #1e293b;
             color: #f1f5f9 !important;
             border-color: #475569;
         }
-        body.dark-mode .text-slate-800,
-        body.dark-mode .text-slate-700 {
+        body.dark .text-slate-800,
+        body.dark .text-slate-700 {
             color: #e2e8f0;
         }
-        body.dark-mode .border-gray-200,
-        body.dark-mode .border-gray-100 {
+        body.dark .border-gray-200,
+        body.dark .border-gray-100 {
             border-color: #334155;
         }
-        body.dark-mode #globalDateBar {
+        body.dark #globalDateBar {
             background-color: #1e293b;
             border-color: #334155;
         }
-        body.dark-mode .bg-[#e6f0fa] {
+        body.dark .bg-[#e6f0fa] {
             background-color: #1e3a5f;
             color: #e2e8f0;
         }
-        body.dark-mode .bg-[#4abe6a] {
+        body.dark .bg-[#4abe6a] {
             background-color: #0e6229;
             color: #ffffff;
         }
-        body.dark-mode .text-gray-500 {
+        body.dark .text-gray-500 {
             color: #94a3b8;
         }
     </style>
@@ -111,19 +116,19 @@
                 </div>
             </div>
 
-            <!-- Kompaktní ovládání kalendáře (světlé provedení) -->
+            <!-- Kompaktní ovládání kalendáře (čistě světlé) -->
             <div id="headerDateControls" class="flex items-center gap-1 shrink-0">
-                <button onclick="stepDate(-1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 active:bg-gray-200 border border-gray-300 rounded text-xs font-bold text-slate-700 shadow-sm transition-colors">◀</button>
-                <input type="date" id="appDatePicker" onchange="setDate(this.value)" class="h-8 text-[11px] font-bold text-[#003366] dark:text-blue-300 border border-gray-300 rounded px-1.5 bg-slate-100 dark:bg-slate-850 text-center focus:outline-none shadow-sm cursor-pointer w-[100px] sm:w-[115px]">
-                <button onclick="stepDate(1)" class="w-8 h-8 flex items-center justify-center bg-slate-100 active:bg-gray-200 border border-gray-300 rounded text-xs font-bold text-slate-700 shadow-sm transition-colors">▶</button>
+                <button onclick="stepDate(-1)" class="w-8 h-8 flex items-center justify-center bg-white active:bg-gray-200 border border-gray-300 rounded text-xs font-bold text-slate-700 shadow-sm transition-colors">◀</button>
+                <input type="date" id="appDatePicker" onchange="setDate(this.value)" class="h-8 text-[11px] font-bold text-[#003366] dark:text-blue-300 border border-gray-300 rounded px-1.5 bg-white dark:bg-slate-850 text-center focus:outline-none shadow-sm cursor-pointer w-[100px] sm:w-[115px]">
+                <button onclick="stepDate(1)" class="w-8 h-8 flex items-center justify-center bg-white active:bg-gray-200 border border-gray-300 rounded text-xs font-bold text-slate-700 shadow-sm transition-colors">▶</button>
             </div>
         </div>
 
-        <!-- Globální vyhledávací pole (světlé provedení) -->
-        <div class="flex justify-end p-2 bg-slate-100 border-b border-gray-200 relative dark:bg-slate-900 dark:border-slate-800" id="globalSearchContainer">
+        <!-- Globální vyhledávací pole (čistě bílé) -->
+        <div class="flex justify-end p-2 bg-white border-b border-gray-200 relative dark:bg-slate-900 dark:border-slate-800" id="globalSearchContainer">
             <div class="relative w-52">
                 <input type="text" id="globalDriverSearch" oninput="performGlobalDriverSearch(this.value)" placeholder="VYHLEDAT ŘIDIČE" class="w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-lg py-1.5 px-3 pr-8 text-[11px] font-bold outline-none focus:border-[#003366] uppercase text-[#003366] dark:text-blue-300 placeholder-gray-500 shadow-sm">
-                <span class="absolute right-2.5 top-2 text-gray-500">
+                <span class="absolute right-2.5 top-2.5 text-gray-500">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </span>
             </div>
@@ -135,14 +140,14 @@
 
     <!-- Mřížka sledování odběru -->
     <main id="tab-counter" class="active-tab p-4 space-y-5">
-        <!-- Formulář aktivace zákazníka -->
-        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-350">
+        <!-- Formulář aktivace zákazníka (čistě bílá pole) -->
+        <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-300">
             <h2 class="text-xs font-black text-slate-850 uppercase tracking-wider mb-3">Aktivovat zákazníka pro vybraný den</h2>
             <div class="grid grid-cols-1 gap-3 sm:grid-cols-4 mb-3">
                 <div class="sm:col-span-2">
                     <label class="text-[11px] font-black text-slate-700 uppercase">Zákazník</label>
                     <div class="flex gap-2 mt-1">
-                        <select id="targetCustomer" class="w-full bg-slate-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 text-sm outline-none font-bold h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
+                        <select id="targetCustomer" class="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 text-sm outline-none font-bold h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
                             <option value="" disabled selected>Vyberte zákazníka...</option>
                         </select>
                         <button onclick="quickAddCustomer('pickup')" class="bg-[#003366] text-white font-bold px-3.5 rounded-lg h-10 hover:bg-black transition-colors" title="Rychle vytvořit svozového zákazníka">+</button>
@@ -151,15 +156,15 @@
                 <div class="sm:col-span-2 grid grid-cols-3 gap-2">
                     <div>
                         <label class="text-[11px] font-black text-slate-700 uppercase">Cíl FP</label>
-                        <input type="number" id="targetFP" placeholder="0" min="0" class="w-full bg-slate-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-slate-850 dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                        <input type="number" id="targetFP" placeholder="0" min="0" class="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-slate-850 dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
                     </div>
                     <div>
                         <label class="text-[11px] font-black text-slate-700 uppercase">Cíl KH</label>
-                        <input type="number" id="targetKH" placeholder="0" min="0" class="w-full bg-slate-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-slate-850 dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                        <input type="number" id="targetKH" placeholder="0" min="0" class="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-slate-850 dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
                     </div>
                     <div>
                         <label class="text-[11px] font-black text-slate-700 uppercase">Cíl PK</label>
-                        <input type="number" id="targetPK" placeholder="0" min="0" class="w-full bg-slate-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-slate-850 dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
+                        <input type="number" id="targetPK" placeholder="0" min="0" class="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg p-2 mt-1 text-sm text-center font-bold h-10 shadow-sm focus:border-[#003366] text-slate-850 dark:text-white focus:ring-1 focus:ring-[#003366]" onfocus="this.select()">
                     </div>
                 </div>
             </div>
@@ -174,7 +179,7 @@
                 <h3 class="font-black text-[#003366] text-xs uppercase tracking-wider">Aktivní sledování odběru</h3>
                 <div class="flex items-center gap-2 self-start sm:self-auto">
                     <!-- Tlačítko pro export detailních denních dat svozu -->
-                    <button onclick="exportDailyDetailedToExcel()" class="bg-[#4abe6a] hover:bg-emerald-650 text-white text-[11px] font-bold py-1.5 px-3 rounded-lg flex items-center gap-1 shadow-sm transition-colors uppercase">
+                    <button onclick="exportDailyDetailedToExcel()" class="bg-[#4abe6a] hover:bg-emerald-600 text-white text-[11px] font-bold py-1.5 px-3 rounded-lg flex items-center gap-1 shadow-sm transition-colors uppercase">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         Export dne
                     </button>
@@ -266,7 +271,7 @@
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Interní řidič</label>
                         <div class="flex gap-2 mt-1">
-                            <select id="trailerDriverSelect" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
+                            <select id="trailerDriverSelect" class="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
                                 <option value="" disabled selected>Vyberte řidiče...</option>
                             </select>
                         </div>
@@ -274,13 +279,13 @@
 
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">SPZ Návěsu</label>
-                        <input type="text" id="trailerSPZInput" placeholder="Např. 3H1 1234" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-750 rounded-lg p-2 mt-1 text-sm font-bold uppercase h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
+                        <input type="text" id="trailerSPZInput" placeholder="Např. 3H1 1234" class="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-750 rounded-lg p-2 mt-1 text-sm font-bold uppercase h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
                     </div>
 
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Přiřadit rozvoz (zákazník)</label>
                         <div class="flex gap-2 mt-1">
-                            <select id="trailerDeliverySelect" onchange="autoAddDraftCustomer('delivery', this)" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
+                            <select id="trailerDeliverySelect" onchange="autoAddDraftCustomer('delivery', this)" class="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
                                 <option value="" disabled selected>Vyberte rozvoz...</option>
                             </select>
                             <button onclick="quickAddCustomer('delivery')" class="bg-[#003366] text-white font-bold px-3 rounded-lg h-10 hover:bg-black transition-colors" title="Rychle vytvořit rozvozového zákazníka">+</button>
@@ -291,7 +296,7 @@
                     <div>
                         <label class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Přiřadit svoz (zákazník)</label>
                         <div class="flex gap-2 mt-1">
-                            <select id="trailerPickupSelect" onchange="autoAddDraftCustomer('pickup', this)" class="w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
+                            <select id="trailerPickupSelect" onchange="autoAddDraftCustomer('pickup', this)" class="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-750 rounded-lg p-2 text-sm outline-none font-medium h-10 shadow-sm focus:border-[#003366] text-slate-800 dark:text-white">
                                 <option value="" disabled selected>Vyberte svoz...</option>
                             </select>
                             <button onclick="quickAddCustomer('pickup')" class="bg-[#003366] text-white font-bold px-3 rounded-lg h-10 hover:bg-black transition-colors" title="Rychle vytvořit svozového zákazníka">+</button>
@@ -518,7 +523,7 @@
             <div class="p-4 space-y-3">
                 <div class="flex space-x-2">
                     <input type="text" id="newCustomerPickupName" placeholder="Název svozového zákazníka" class="flex-1 bg-gray-50 border border-gray-300 rounded-lg p-2 text-xs font-bold uppercase outline-none focus:border-[#003366] text-black dark:text-white">
-                    <button onclick="addItem('customersPickup', 'newCustomerPickupName')" class="bg-[#003366] text-white px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
+                    <button onclick="addItem('customersPickup', 'newCustomerPickupName')" class="bg-[#003366] text-white font-bold px-4 rounded-lg font-bold text-sm hover:bg-black transition-colors">+</button>
                 </div>
                 <div id="settingsCustomersPickupList" class="max-h-48 overflow-y-auto space-y-2 pr-1 text-sm"></div>
             </div>
@@ -579,7 +584,6 @@
     </nav>
 
     <script>
-        // Vaše konfigurace Firebase
         const firebaseConfig = {
           apiKey: "AIzaSyDFYGCL-G3cd-nd5OkqOgc5laK-MsYACVk",
           authDomain: "geis---svozy.firebaseapp.com",
@@ -622,9 +626,10 @@
         let localDriverCards = []; 
         let localCustomerCards = [];
 
-        // Dark Mode logika
+        // Dark Mode logika, která synchronizuje Tailwind i vlastní styl
         function toggleDarkMode() {
-            const isDark = document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.toggle('dark');
+            document.body.classList.toggle('dark-mode', isDark);
             localStorage.setItem('darkMode', isDark);
             updateThemeIcon(isDark);
         }
@@ -640,7 +645,7 @@
         }
 
         if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
+            document.body.classList.add('dark', 'dark-mode');
             updateThemeIcon(true);
         }
 
@@ -711,7 +716,6 @@
             renderTrailersTab();
         }
 
-        // EXPORT AKTIVNÍHO DATA DO ZÁLOHY
         function exportData() {
             const backup = {
                 dailyTargets: localDailyTargets,
@@ -730,7 +734,6 @@
             downloadAnchor.remove();
         }
 
-        // IMPORT DATA ZE ZÁLOHY
         function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1561,6 +1564,7 @@
 
             plansList.innerHTML = dayPlans.map(p => `
                 <div class="bg-[#1e293b] text-white rounded-xl p-3 shadow-sm hover:border-[#003366] transition-colors space-y-2.5">
+                    <!-- Horní řádek -->
                     <div class="flex justify-between items-start border-b border-slate-700/50 pb-2">
                         <div>
                             <span class="text-[8px] font-bold text-slate-400 block tracking-wider uppercase mb-0.5">${p.spz && p.spz !== 'BEZ SPZ' ? p.spz : 'BEZ SPZ'}</span>
@@ -1574,6 +1578,7 @@
                         </div>
                     </div>
                     
+                    <!-- Spodní sekce -->
                     <div class="grid grid-cols-2 gap-3 pt-1">
                         <div class="space-y-1.5 bg-slate-800/40 p-2 rounded-lg border border-slate-700/50">
                             <span class="text-[9px] font-black text-blue-400 uppercase tracking-widest block mb-1">ROZVOZ</span>
@@ -2407,6 +2412,12 @@
             if(tabId === 'settings') renderSettingsTab();
         }
 
+        // Spouštěcí sekvence, která zkontroluje minulé nastavení
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark', 'dark-mode');
+        } else {
+            document.body.classList.remove('dark', 'dark-mode');
+        }
         updateDateUI();
         switchTab('counter');
     </script>
